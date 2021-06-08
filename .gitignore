@@ -1,0 +1,4 @@
+ipynb_files/
+*.org
+.DS*
+.ipynb_checkpoints
