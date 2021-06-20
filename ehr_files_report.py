@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """
 
 Code to extract metadata on file submission under ACSD
@@ -12,11 +14,11 @@ import shutil
 import pandas as pd
 from datetime import datetime
 import fitz
+
 """
 Things to do:
 - create folders with site name & collect all relevant files
 - unzip and collect all files
-
 - consider the following metadata report
   - pdf scanned or notes
   - pages
@@ -37,7 +39,11 @@ def unzip_file(filepth, new_folder='zip_archives'):
     for items in os.listdir(filepth):
         file_path = join(pth,items)
         if isfile(file_path):
-            if items.split('.')[-1] == 'zip':
+            fname, file_ext = os.path.splitext(items)
+            print(file_ext)
+            print(fname)
+            if re.search('.zip|.7z',file_ext):
+            #if items.split('.')[-1] == '.zip':
                 shutil.unpack_archive(file_path,pth)
                 shutil.move(file_path,
                             join(filepth,new_folder))
@@ -152,15 +158,15 @@ def get_text_percentage(file_name):
 
 
 if __name__ == '__main__':
-    pth = '/Users/sandeep/Documents/1-PROJECTS/sts/hms_data/acsd/ehr_data'
+    pth = '/Users/sandeep/Documents/1-PROJECTS/sts/hms_data/acsd/or_log_data/zipped_files'
     opth = '/Users/sandeep/Documents/1-PROJECTS/sts/reports/'
-    #print(unzip_file(pth))
+    print(unzip_file(pth))
     #move_file(pth)
     #daton = report_files(pth)
     #newdat = data_clean(daton)
     #data_save(newdat,'acsd_submission')
     #create_folder(pth)
-
+    '''
     fillist = [f for f in os.listdir(pth)
                if not re.search("^(zip|\.DS)", f)]
     print(fillist)
@@ -182,3 +188,4 @@ if __name__ == '__main__':
     dat2=data_clean(dat)
     dat3=clean_master(dat2)
     data_save(dat3,pth=opth,name_path='acsd_uploads')
+    '''
