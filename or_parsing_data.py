@@ -17,14 +17,14 @@ TODO
 
 """
 from datetime import datetime
-import pandas as pd
-import numpy as np
 import os
 import re
+import pandas as pd
 
 
 def read_files(filepath):
-    dat=pd.read_excel(filepath, sheet_name=None, index_col=0)
+    """Read files from a folder"""
+    dat = pd.read_excel(filepath, sheet_name=None, index_col=0)
     return dat
 
 
