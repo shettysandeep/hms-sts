@@ -95,7 +95,7 @@ def clean_data_app2(dataset, col_replace, search_term):
     print(cleaned_list)
     filter_col = []
     for col in cleaned_list:
-        for item, _ in col_replace.iteritems():
+        for item, _ in col_replace.items():
             if item in col:
                 filter_col.append(col)
     set_filter_col = list(set(filter_col))
