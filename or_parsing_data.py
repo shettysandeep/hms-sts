@@ -4,9 +4,12 @@
 __author__: Sandeep Shetty
 __date__: June 06, 2021
 
-Code to parse OR Logs submitted in Excel format. The files in the breadth of
-information shared, the variable names, and useability. The objective is parse,
-harmonize and combine data into a large table for comparing for auditing.
+Code to parse OR Logs submitted as Excel workbooks. The files differ in the breadth of
+information shared (variable names, etc.). The objective is to parse,
+harmonize and combine data into one large table for comparing for auditing.
+
+Input: Path to collection of files
+Output: Combined Pandas DataFrame
 
 """
 from datetime import datetime
@@ -16,21 +19,24 @@ import pandas as pd
 
 
 def read_files(filepath):
-    """Read files from a folder"""
+    """Returns .xlsx workbook as Pandas DataFrame (dictionary)"""
     dat = pd.read_excel(filepath, sheet_name=None, index_col=0)
     return dat
 
+def gather_files(file_dir, file_type='(xls|csv)'):
+    """ Returns a list of .xls or .csv files at the given location
 
-def gather_files(file_dir):
-    """ Collect all files with proper path from the directory"""
+    Keyword arguments:
+    file_dir -- Path to the folder
+    file_type -- Type of file to select - xlsx or csv
+    """
     all_file = [os.path.join(file_dir, f)
                 for f in os.listdir(file_dir)
                 if '.DS' not in f]
-    fil_typ = '(xls|csv)'
+    # fil_typ = '(xls|csv)'
     keep_excel = [f for f in all_file
-                  if re.search(fil_typ, os.path.splitext(f)[1])]
+                  if re.search(file_type, os.path.splitext(f)[1])]
     return keep_excel
-
 
 def parse_excel(filepath, search_term):
     '''
@@ -169,6 +175,7 @@ if __name__ == '__main__':
                  "patient name": 'patient',
                  "patient's name": 'patient',
                  "patient id": 'patient id',
+                 "patient": "patient id",
                  "case": "procedure",
                  "dob": "birth dt",
                  "record_id": "record id",
@@ -177,7 +184,10 @@ if __name__ == '__main__':
                  "date": "date",
                  "adm": "admission",
                  "mrn": "medical id",
-                 "id": "medical id"
+                 "id": "medical id",
+                 "gender": "gender",
+                 "record" : "record",
+                 "sts": "sts id"
                  }
     """
     for key, fil in enumerate(f):
@@ -194,6 +204,7 @@ if __name__ == '__main__':
         #print(clean_dataset.columns.tolist())
         datnew2 = datnew2.append(clean_dataset)
     """
+
     # datnew2 = pd.DataFrame()
     dict_columns = {}
     for key, fil in enumerate(f):
