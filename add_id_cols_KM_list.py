@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 __author__: Sandeep Shetty
-__date__: July 03, 2021
+__date__: July 02, 2021
 
 Returns a list of columns that includes identifying variables such as Record
 ID/ STS ID. These variables identify the site and record within the ACSD master
