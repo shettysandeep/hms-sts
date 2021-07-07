@@ -15,6 +15,28 @@ import os, re
 import pandas as pd
 from datetime import datetime
 
+def combine_cols(pd_dat, name_comb_col, col_name_search, func):
+    """Combining all similarly titles variables"""
+    temp_cols = pd_dat.columns.str.contains(col_name_search)
+    pd_dat[name_comb_col] = pd_dat.iloc[:, temp_cols].apply(func,axis=1)
+    return pd_dat
+
+def drop_cols(pd_dat, del_col_names):
+    """drop columns that contain the text in del_col_names"""
+    try:
+        if isinstance(del_col_names, list):
+            for items in del_col_names:
+                temp_cols = pd_dat.columns.str.contains(items)
+                pd_dat.drop(columns=pd_dat.columns[temp_cols],
+                            inplace=True)
+    except:
+        print('del_col_names must be a list')
+    return pd_dat
+
+def non_blank_value(x):
+    """x is pandas series"""
+    return x[x.notnull()]
+
 if __name__ == '__main__':
 
     # File path
@@ -54,41 +76,32 @@ if __name__ == '__main__':
     for cols in date_columns:
         datafile[cols] = datafile[cols].apply(pd.to_datetime, errors='coerce')
 
-    def combine_cols(pd_dat, name_comb_col, col_name_search):
-        """Combining all similarly titles variables"""
-        temp_cols = pd_dat.columns.str.contains(col_name_search)
-        pd_dat[name_comb_col] = pd_dat.iloc[:, temp_cols].max(axis=1)
-        return pd_dat
-
-    def drop_cols(pd_dat, del_col_names):
-        """drop columns that contain the text in del_col_names"""
-        try:
-            if isinstance(del_col_names, list):
-                for items in del_col_names:
-                    temp_cols = pd_dat.columns.str.contains(items)
-                    pd_dat.drop(columns=pd_dat.columns[temp_cols],
-                                inplace=True)
-        except:
-            print('del_col_names must be a list')
-        return pd_dat
+    # drop columns with no values
+    datafile.dropna(how="all", axis=1, inplace=True)
 
     # combine columns with dates - admit, surgery, discharge
-    datafile = combine_cols(datafile, 'admission_dt', 'admit_dt')
-    datafile = combine_cols(datafile, 'surgery_dt', 'surg_dt')
-    datafile = combine_cols(datafile, 'discharge_dt', 'disch_dt')
+    datafile = combine_cols(datafile, 'admission_dt', 'admit_dt', func=max)
+    datafile = combine_cols(datafile, 'surgery_dt', 'surg_dt', func=max)
+    datafile = combine_cols(datafile, 'discharge_dt', 'disch_dt', func=max)
     # delete date columns after combining
     datafile = drop_cols(pd_dat=datafile,
                          del_col_names=['admit_dt', 'surg_dt', 'disch_dt'])
-    # drop all columns with no values
-    datafile.dropna(how="all", axis=1, inplace=True)
 
     # combine columns with procedure description
-    datafile = combine_cols(datafile, 'surgery_procedure', 'proc')
+    datafile = combine_cols(datafile, 'surg_des', 'procedure', func=non_blank_value)
     # drop columns with procedure
-    datafile = drop_cols(pd_dat=datafile,
-                         del_col_names=['proc'])
+    datafile = drop_cols(pd_dat=datafile, del_col_names=['procedure'])
 
-    print(datafile['surgery_procedure'].head())
+    # combine gender
+    # datafile = combine_cols(datafile, 'patient_sex', 'gender', func=lambda x: x[x.notnull()])
+    datafile = combine_cols(datafile, 'patient_sex', 'gender', func=non_blank_value)
+    # drop columns with procedure
+    datafile = drop_cols(pd_dat=datafile, del_col_names=['gender'])
 
+    print(datafile.head())
+    print(datafile[['admission_dt','surgery_dt','discharge_dt',
+                    'patient_sex', 'surg_des']])
+
+    # datafile.to_csv('temp_save.csv')
     # datafile.iloc[:,datafile.columns.str.contains('gender')].to_csv(os.path.join(OUT_PTH,'gender.csv'))
     # datafile.to_csv(os.path.join(OUT_PTH,'Test_ki_maa.csv'))
