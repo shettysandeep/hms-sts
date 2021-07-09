@@ -1,393 +1,393 @@
-﻿Old_names,New_names
-mrn,mrn
-procedure,procedure
-record id,record_id
-discharge date,disch_dt
-procedure description,proc_des
-gender,gender
-age,
-admission date,admit_dt
-dob,
-patient id,patient_id
-surgery date,surg_dt
-filename,filename
-date of surgery,surg_dt
-id,id
-procedure descriptions,proc_des
-age (on date of surgery),
-sts record id,record_id
-date of birth,
-scheduled start dt/tm,
-patient in room,
-primary procedure,primary_proc
-pt age in years (at surg),
-primary surgeon,
-patient name,
-patient date of birth,
-patient sex,gender
-or case number,or_case_number
-patient out room,
-procedures,procedure
-lead surgeon/provider,
-patient age on procedure date,
-case #,case #
-procedure 2,
-birth date,
-principal procedure,procedure
-discharge datetime,disch_dt
-age at procedure,
-admission datetime,admit_dt
-provider name,
-sex,gender
-procedure 3,
-surgery discharge date,disch_dt
-age on date of surgery,
-account # /mrn,mrn
-surgery admission date,admit_dt
-patientage,
-surgerydate,surg_dt
-dischargedate,disch_dt
-orprocedurename,procedure
-dateofbirth,
-admitdate,admit_dt
-sts id,record_id
-admit date,admit_dt
-dc date,disch_dt
-d/c date,disch_dt
-procedure ,procedure
-procedure date,surg_dt
-dob and age,
-date of discharge,disch_dt
-date of admission,admit_dt
-patient age,
+﻿Old_names,New_names,Katie_add
+mrn,mrn,
+procedure,procedure,
+record id,record_id,
+discharge date,disch_dt,
+procedure description,proc_des,
+gender,gender,
+age,,
+admission date,admit_dt,
+dob,,
+patient id,patient_id,
+surgery date,surg_dt,
+filename,filename,
+date of surgery,surg_dt,
+id,id,
+procedure descriptions,proc_des,
+age (on date of surgery),,
+sts record id,record_id,
+date of birth,,
+scheduled start dt/tm,,
+patient in room,,
+primary procedure,procedure,added
+pt age in years (at surg),,
+primary surgeon,,
+patient name,,
+patient date of birth,,
+patient sex,gender,
+or case number,,removed
+patient out room,,
+procedures,procedure,
+lead surgeon/provider,,
+patient age on procedure date,,
+case #,case #,
+procedure 2,,
+birth date,,
+principal procedure,procedure,
+discharge datetime,disch_dt,
+age at procedure,,
+admission datetime,admit_dt,
+provider name,,
+sex,gender,
+procedure 3,,
+surgery discharge date,disch_dt,
+age on date of surgery,,
+account # /mrn,mrn,
+surgery admission date,admit_dt,
+patientage,,
+surgerydate,surg_dt,
+dischargedate,disch_dt,
+orprocedurename,procedure,
+dateofbirth,,
+admitdate,admit_dt,
+sts id,record_id,
+admit date,admit_dt,
+dc date,disch_dt,
+d/c date,disch_dt,
+procedure ,procedure,
+procedure date,surg_dt,
+dob and age,,
+date of discharge,disch_dt,
+date of admission,admit_dt,
+patient age,,
 "
-date",
+date",,
 "
-patient",
+patient",,
 "
-surgeon",
+surgeon",,
 "
-procedure",procedure
+procedure",procedure,
 "
-modified procedure",
-admit type,
-book date,
-age(on date of surgery),
-inpatient admit datetime,admit_dt
-patient type,
-inpatient discharge datetime,disch_dt
-"page, sharon ann",
-inpatient rehab facility/unit - ihc,
-medical record #,mrn
-record id:,record_id
-case type,
-participant id:,participant_id
-surgery,surg_dt
-surgeon,
-patient's name,
-patient,
-surgeon2,
-adm date,admit_dt
-or date,surg_dt
-discharge,disch_dt
-admit,admit_dt
-sts #,record_id
-procedure type,procedure
-medrec number - patient id,mrn
-surgeon name,
-birthdate,
- medical record #,mrn
-crp_discharge_date,disch_dt
-proceduredate,surg_dt
-ageatsurgery,
-date,surg_dt
-mrn #,mrn
-age (on dos),
-pat_age,
-birth_date,
-pat_mrn_id,mrn
-proc_date,surg_dt
-hosp_admsn,admit_dt
-log_id,log_id
-procedure_list,
+modified procedure",,
+admit type,,
+book date,,
+age(on date of surgery),,
+inpatient admit datetime,admit_dt,
+patient type,,
+inpatient discharge datetime,disch_dt,
+"page, sharon ann",,
+inpatient rehab facility/unit - ihc,,
+medical record #,mrn,
+record id:,record_id,
+case type,,
+participant id:,participant_id,
+surgery,surg_dt,
+surgeon,,
+patient's name,,
+patient,,
+surgeon2,,
+adm date,admit_dt,
+or date,surg_dt,
+discharge,disch_dt,
+admit,admit_dt,
+sts #,record_id,
+procedure type,procedure,
+medrec number - patient id,mrn,
+surgeon name,,
+birthdate,,
+ medical record #,mrn,
+crp_discharge_date,disch_dt,
+proceduredate,surg_dt,
+ageatsurgery,,
+date,surg_dt,
+mrn #,mrn,
+age (on dos),,
+pat_age,,
+birth_date,,
+pat_mrn_id,mrn,
+proc_date,surg_dt,
+hosp_admsn,admit_dt,
+log_id,log_id,
+procedure_list,,
 "patient ready 
-on time",
+on time",,
 "case 
-number",
-operation date,
+number",case #,
+operation date,surg_dt,added
 "discharge 
-date",disch_dt
-asa id,asa_id
+date",disch_dt,
+asa id,asa_id,
 "surgeon 
-arrival",
-actual surgeon name,
-cws apptid,
-procedure name,procedure
+arrival",,
+actual surgeon name,,
+cws apptid,,
+procedure name,procedure,
 "patient 
-age",
+age",,
 "patient 
-location",
+location",,
 "medical record 
-number",mrn
+number",mrn,
 "minutes between 
 surgeon arrival & 
-op start time",
+op start time",,
 "date of 
-admission",admit_dt
+admission",admit_dt,
 "surgeon
-on time",
-discharge provider name,
+on time",,
+discharge provider name,,
 "patient age 
-at registration",
-dischdate,disch_dt
-"sts record id, surgery date",record_id
-procedure discription,proc_des
-case description,proc_des
-procedure text,proc_des
-age on surgery date,
-sts record id ,record_id
-case procedures,procedure
-age at surgery,
-ageats,
-datetime of surgery,surg_dt
-procedure descriptiom,proc_des
-dateofsurgery,surg_dt
-pat_mrn,mrn
-disch date,disch_dt
-sts record id #,record_id
-surgery dc date,surg_dt
-opdate,surg_dt
-pt_age,
-sts record,record_id
-date of birth ,
-surgeon_name,
-or out date,disch_dt
-patient out - pre-op,
-total case time (hrs.),
-participant id,patient_id
-surgeon department,
-case_type,
-procedure_date_dt,surg_dt
-pacu_in_date_time,
-age_v8,
-procedure icd desc,
-admission_type,
-scheduled procedure start  time,
-pir_date_time,
-case_confirmation_num,
-optime patient type ,
-transfer/discharge from unit,
-dob ,
-actual procedure name,
-antibiotics administered,
-scheduled case time,
-procedure not perf,
-provider dictation code,
-admit source,
-surgeon_specialty,
-hospital_patient_id,
-por_date_time,
-patientout,
-as_date_time,
-patient ready for or,
-add on case y/n,
-adt patient type,
-scheduled procedure name,procedure
-surgeon available,
-facility_record_num,facility_num
-scheduled procedure end time,
-af_date_time,
-patient in,
-case classification,
-pacu_out_date_time,
-procedure approach,
-procedure alias,proc_alias
-procedure icd ,
-encounter_provider,
-surgeon_v50,
-sts recordid,record_id
-patient_name,
-patient in - pre-op,
-first case y/n,
-patient in - facility,
-total case time,
-procedure_name,
-surgeon division,
-sts id#,
-surg_dt,
-booking_dt,
-case_level,
-patient_dob,
-sts_record id,
-inpatient,
-dodisch,disch_dt
-procedure category,procedure
-doadm,admit_dt
-dobirth,
-dosurg,surg_dt
-record_id,record_id
-age ,
-start date,surg_dt
-surgery_procedures_col,
-sts patient id,record_id
-date of discharge ,disch_dt
- patient first name ,
-mrn number,mrn
- patient last name ,
-surgdt,surg_dt
-dischdt,disch_dt
-admitdt,admit_dt
-o.r. procedure description,proc_des
-case date,admit_dt
-table1.ss_patient_id,
-table1.casetypenew,
-table1.ss_event_id,
-table1.mrn,mrn
-table1.proceduretype,procedure
-sts.gender,gender
-sts.ss_event_id,
-table1.age,
-surgery_date,surg_dt
-table1.dob,
-table1.dateofadmission,admit_dt
-sts.discharge_date,disch_dt
-table1.eventdate,
-patient in room time,
-total patient in room minutes,
-surgery stop time,
-date of surgery {310},surg_dt
-sex {75},gender
-record id {30},record_id
-patient age {70},
-other procedure category,
-patient out of room time,
-surgery start time,
-total surgery minutes,
-case start date,
-admit date {305},admit_dt
-patient medical record number,mrn
-discharge date/time,disch_dt
-mrn1,mrn
-primary procedure surgeon comment,
-hospital discharge date {7006},disch_dt
-patient financial number,
-primary procedure (orc desc),procedure
-lead surgeon,
-patient sts record id,record_id
-case number,
-case start day,
-asa class (surgery),
-procedure peformed,procedure
-case start month,
-patient financial class,
-patient exit stage area time,
-patient enter stage area time,
-number of minutes in stage area,
-scheduled procedure duration,
-anesthesia type (surgery),
-scheduled procedure duration hours,
-other surgeon(s),
-primary surgeon(s),
-scheduled case start time,
-secondary procedure(s),
-operating room (surgery),
-patient social security number,
-age (dos),
-roomindatetime,
-patientmrn,
-net case,
-roomoutdatetime,
-actualproceduredescription,
-sts site,
-age - surgery date,
-misc procedure,
-pulmonary procedure,
-birth dt,
-admission,admit_dt
-dischdttm,disch_dt
-patientlast,
-patientdob,
-patientaccountnumber,
-ageatsurg,
-patientfirst,
-procedure start time,
-age (at surgery),
-sts record id vendor=armus,
-actual procedure description 2,
-actual procedure description 4,
-wheels-in date (pat in),
-wheels-out date (pat out),
-actual procedure description 3,
-actual procedure description 1,
-surg admission date,admit_dt
-days since surgery,
-anti-lipid at discharge,
-patient expired in or,
-beta blockers at discharge,
-icu readmit,
-readmit days,
-date of readmission,
-readmit days range,
-mortality date,
-q id,
-discharge mortality status,
-aorta procedure,
-days since surgery range,
-readmit reason,
-readmission,
-incidence,
-sub procedure type,
-readmit procedure,
-anti-platelet at discharge ,
-major morbidity,
-incidenc,
-bdtx,
-anesenddt,
-intubatedt,
-readmit,
-medthromin5days,
-stresstst,
-medthrom,
-cardsymptimeofadm,
-imedtran,
-lfudate,
-orexitdt,
-pcanccase,
-sistopdt,
-particid,
-extubatedt,
-ccanccase,
-carcathdt,
-orentrydt,
-sistartdt,
-vendorid,
-medlipid,
-patientcountry,
-admitsrc,
-icureadm,
-vdtr,
-recordid,record_id
-patid,patient_id
-admit dt/tm,admit_dt
-procedure display name,
-pt sex,gender
-log id,
-panel primary surgeon,
-total number of procedures,
-pt age at procedure,
-panel primary surgeon id,
-proc date,surg_dt
+at registration",,
+dischdate,disch_dt,
+"sts record id, surgery date",record_id,
+procedure discription,proc_des,
+case description,proc_des,
+procedure text,proc_des,
+age on surgery date,,
+sts record id ,record_id,
+case procedures,procedure,
+age at surgery,,
+ageats,,
+datetime of surgery,surg_dt,
+procedure descriptiom,proc_des,
+dateofsurgery,surg_dt,
+pat_mrn,mrn,
+disch date,disch_dt,
+sts record id #,record_id,
+surgery dc date,surg_dt,
+opdate,surg_dt,
+pt_age,,
+sts record,record_id,
+date of birth ,,
+surgeon_name,,
+or out date,,Remove disch_dt
+patient out - pre-op,,
+total case time (hrs.),,
+participant id,patient_id,
+surgeon department,,
+case_type,,
+procedure_date_dt,surg_dt,
+pacu_in_date_time,,
+age_v8,,
+procedure icd desc,,
+admission_type,,
+scheduled procedure start  time,,
+pir_date_time,,
+case_confirmation_num,,
+optime patient type ,,
+transfer/discharge from unit,,
+dob ,,
+actual procedure name,,
+antibiotics administered,,
+scheduled case time,,
+procedure not perf,,
+provider dictation code,,
+admit source,,
+surgeon_specialty,,
+hospital_patient_id,,
+por_date_time,,
+patientout,,
+as_date_time,,
+patient ready for or,,
+add on case y/n,,
+adt patient type,,
+scheduled procedure name,procedure,
+surgeon available,,
+facility_record_num,facility_num,
+scheduled procedure end time,,
+af_date_time,,
+patient in,,
+case classification,,
+pacu_out_date_time,,
+procedure approach,,
+procedure alias,proc_alias,
+procedure icd ,,
+encounter_provider,,
+surgeon_v50,,
+sts recordid,record_id,
+patient_name,,
+patient in - pre-op,,
+first case y/n,,
+patient in - facility,,
+total case time,,
+procedure_name,procedure,
+surgeon division,,
+sts id#,,
+surg_dt,,
+booking_dt,,
+case_level,,
+patient_dob,,
+sts_record id,,
+inpatient,,
+dodisch,disch_dt,
+procedure category,procedure,
+doadm,admit_dt,
+dobirth,,
+dosurg,surg_dt,
+record_id,record_id,
+age ,,
+start date,surg_dt,
+surgery_procedures_col,,
+sts patient id,record_id,
+date of discharge ,disch_dt,
+ patient first name ,,
+mrn number,mrn,
+ patient last name ,,
+surgdt,surg_dt,
+dischdt,disch_dt,
+admitdt,admit_dt,
+o.r. procedure description,proc_des,
+case date,admit_dt,
+table1.ss_patient_id,,
+table1.casetypenew,,
+table1.ss_event_id,,
+table1.mrn,mrn,
+table1.proceduretype,procedure,
+sts.gender,gender,
+sts.ss_event_id,,
+table1.age,,
+surgery_date,surg_dt,
+table1.dob,,
+table1.dateofadmission,admit_dt,
+sts.discharge_date,disch_dt,
+table1.eventdate,,
+patient in room time,,
+total patient in room minutes,,
+surgery stop time,,
+date of surgery {310},surg_dt,
+sex {75},gender,
+record id {30},record_id,
+patient age {70},,
+other procedure category,,
+patient out of room time,,
+surgery start time,,
+total surgery minutes,,
+case start date,,
+admit date {305},admit_dt,
+patient medical record number,mrn,
+discharge date/time,disch_dt,
+mrn1,mrn,
+primary procedure surgeon comment,,
+hospital discharge date {7006},disch_dt,
+patient financial number,,
+primary procedure (orc desc),procedure,
+lead surgeon,,
+patient sts record id,record_id,
+case number,,
+case start day,,
+asa class (surgery),,
+procedure peformed,procedure,
+case start month,,
+patient financial class,,
+patient exit stage area time,,
+patient enter stage area time,,
+number of minutes in stage area,,
+scheduled procedure duration,,
+anesthesia type (surgery),,
+scheduled procedure duration hours,,
+other surgeon(s),,
+primary surgeon(s),,
+scheduled case start time,,
+secondary procedure(s),,
+operating room (surgery),,
+patient social security number,,
+age (dos),,
+roomindatetime,,
+patientmrn,mrn,added
+net case,,
+roomoutdatetime,,
+actualproceduredescription,proc_des,
+sts site,sts_site,
+age - surgery date,,
+misc procedure,,
+pulmonary procedure,,
+birth dt,,
+admission,admit_dt,
+dischdttm,disch_dt,
+patientlast,,
+patientdob,,
+patientaccountnumber,,
+ageatsurg,,
+patientfirst,,
+procedure start time,,
+age (at surgery),,
+sts record id vendor=armus,record_id,
+actual procedure description 2,,
+actual procedure description 4,,
+wheels-in date (pat in),,
+wheels-out date (pat out),,
+actual procedure description 3,,
+actual procedure description 1,,
+surg admission date,admit_dt,
+days since surgery,,
+anti-lipid at discharge,,
+patient expired in or,,
+beta blockers at discharge,,
+icu readmit,,
+readmit days,,
+date of readmission,,
+readmit days range,,
+mortality date,,
+q id,,
+discharge mortality status,,
+aorta procedure,,
+days since surgery range,,
+readmit reason,,
+readmission,,
+incidence,,
+sub procedure type,,
+readmit procedure,,
+anti-platelet at discharge ,,
+major morbidity,,
+incidenc,,
+bdtx,,
+anesenddt,,
+intubatedt,,
+readmit,,
+medthromin5days,,
+stresstst,,
+medthrom,,
+cardsymptimeofadm,,
+imedtran,,
+lfudate,,
+orexitdt,,
+pcanccase,,
+sistopdt,,
+particid,,
+extubatedt,,
+ccanccase,,
+carcathdt,,
+orentrydt,,
+sistartdt,,
+vendorid,,
+medlipid,,
+patientcountry,,
+admitsrc,,
+icureadm,,
+vdtr,,
+recordid,record_id,
+patid,patient_id,
+admit dt/tm,admit_dt,
+procedure display name,,
+pt sex,gender,
+log id,,
+panel primary surgeon,,
+total number of procedures,,
+pt age at procedure,,
+panel primary surgeon id,,
+proc date,surg_dt,
 "age 
-(on date of surgery)",
-case procedure,procedure
-date of admission {305},admit_dt
-date of discharge {315},disch_dt
-date of surg,surg_dt
-case duration hours,
-admit date/time,admit_dt
-case create date/time,
-scheduled start date/time,
-scheduled case duration,
-patient age in years (at time of surgery),
-case level,
-case duration,
+(on date of surgery)",,
+case procedure,procedure,
+date of admission {305},admit_dt,
+date of discharge {315},disch_dt,
+date of surg,surg_dt,
+case duration hours,,
+admit date/time,admit_dt,
+case create date/time,,
+scheduled start date/time,,
+scheduled case duration,,
+patient age in years (at time of surgery),,
+case level,,
+case duration,,
