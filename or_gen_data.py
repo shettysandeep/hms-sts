@@ -3,23 +3,27 @@
 __author__: Sandeep Shetty
 __date__: July 06, 2021
 
-Code cleans up the almost-raw data combined in or_parsing_data.py. Here we have
-to reduce the columns relevant for auditing, namely, admission date, discharge
-date, procedure, and the identifiers. In this code after filtering all the
-columns we will also rename them to combine the dataset.
-Eventually, this code will produce dataset with the following columns
-[id, mrn, gender, admit date, surgery date, discharge date, procedure]
+Code cleans up the almost-raw data obtained from or_parsing_data.py. Selects
+only the  columns that are relevant for auditing, namely, admission date, discharge
+date, procedure, and the identifiers.
+
+Similar columns are pooled together. The final resulting dataset will have the
+following columns --
+
+ [id, mrn, gender, admit date, surgery date, discharge date, procedure]
 
 """
 import os, re
 import pandas as pd
 from datetime import datetime
 
+
 def combine_cols(pd_dat, name_comb_col, col_name_search, func):
     """Combining all similarly titles variables"""
     temp_cols = pd_dat.columns.str.contains(col_name_search)
-    pd_dat[name_comb_col] = pd_dat.iloc[:, temp_cols].apply(func,axis=1)
+    pd_dat[name_comb_col] = pd_dat.iloc[:, temp_cols].apply(func, axis=1)
     return pd_dat
+
 
 def drop_cols(pd_dat, del_col_names):
     """drop columns that contain the text in del_col_names"""
@@ -27,15 +31,48 @@ def drop_cols(pd_dat, del_col_names):
         if isinstance(del_col_names, list):
             for items in del_col_names:
                 temp_cols = pd_dat.columns.str.contains(items)
-                pd_dat.drop(columns=pd_dat.columns[temp_cols],
-                            inplace=True)
+                pd_dat.drop(columns=pd_dat.columns[temp_cols], inplace=True)
     except:
         print('del_col_names must be a list')
     return pd_dat
 
+
 def non_blank_value(x):
-    """x is pandas series"""
+    """x is pandas series, int, not-empty"""
     return x[x.notnull()]
+
+
+def non_null_mrn(col_search="mrn"):
+    """Specific function to obtain non-null values from a columns of mrn
+    (medical record number). Applicable to a set of columns with string
+    and integer values, etc
+
+    Returns a pandas Series
+    """
+    col_mrn = {}
+    # columns with mrn in names
+    mrn_cols = datafile.columns.str.contains(col_search)
+    # subset the datafile
+    mrn = datafile.iloc[:, mrn_cols]
+    for index in mrn.index:
+        # Slice (series) with values (True/False)
+        not_na_val = pd.notna(mrn.iloc[index, :])
+        # obtain the values - so far the best way to deal with NaN
+        val = mrn.loc[index, not_na_val].to_list()
+        # val is a list (with a non-blank, if available)
+        if len(val) > 0:
+            col_mrn[index] = next(s for s in val if s)
+        else:
+            col_mrn[index] = None
+    return pd.Series(col_mrn)
+
+
+def subset_select_cols(pd_dat, search_text):
+    """Utility function to print select columns based on search text"""
+    cols_select = pd_dat.columns.str.contains(search_text)
+    temp_dat = pd_dat.iloc[:, cols_select]
+    return temp_dat
+
 
 if __name__ == '__main__':
 
@@ -50,7 +87,7 @@ if __name__ == '__main__':
     # Read the files with the columns to use
     # Create list of columns to drop from datafile above
     # Create list of Columns to rename from datafile above
-    all_columns = pd.read_csv('../reports/Rename_columns_file.csv')
+    all_columns = pd.read_csv('Rename_columns_file.csv')
     cols_to_drop = all_columns[
         all_columns.New_names.isnull()]['Old_names'].tolist()
     cols_to_rename = all_columns[all_columns.New_names.notnull()]
@@ -69,8 +106,7 @@ if __name__ == '__main__':
     datafile.rename(columns=old_new_cols, inplace=True)
     datafile.drop(columns="Unnamed: 0", inplace=True)
 
-    # ~~~ Convert dtypes
-    # Convert all time variable into time
+    # Convert all date variable into Datetime objects
     date_columns = datafile.columns[datafile.columns.str.contains('dt')]
     non_date_cols = datafile.columns[~datafile.columns.str.contains('dt')]
     for cols in date_columns:
@@ -79,7 +115,7 @@ if __name__ == '__main__':
     # drop columns with no values
     datafile.dropna(how="all", axis=1, inplace=True)
 
-    # combine columns with dates - admit, surgery, discharge
+    # combine similar columns- admit, surgery, discharge
     datafile = combine_cols(datafile, 'admission_dt', 'admit_dt', func=max)
     datafile = combine_cols(datafile, 'surgery_dt', 'surg_dt', func=max)
     datafile = combine_cols(datafile, 'discharge_dt', 'disch_dt', func=max)
@@ -88,20 +124,31 @@ if __name__ == '__main__':
                          del_col_names=['admit_dt', 'surg_dt', 'disch_dt'])
 
     # combine columns with procedure description
-    datafile = combine_cols(datafile, 'surg_des', 'procedure', func=non_blank_value)
+    datafile = combine_cols(datafile,
+                            'prcdr_des',
+                            'procedure',
+                            func=non_blank_value)
     # drop columns with procedure
     datafile = drop_cols(pd_dat=datafile, del_col_names=['procedure'])
-
-    # combine gender
-    # datafile = combine_cols(datafile, 'patient_sex', 'gender', func=lambda x: x[x.notnull()])
-    datafile = combine_cols(datafile, 'patient_sex', 'gender', func=non_blank_value)
-    # drop columns with procedure
+    # combine gender variables
+    datafile = combine_cols(datafile,
+                            'patient_sex',
+                            'gender',
+                            func=non_blank_value)
+    # drop columns with gender
     datafile = drop_cols(pd_dat=datafile, del_col_names=['gender'])
 
-    print(datafile.head())
-    print(datafile[['admission_dt','surgery_dt','discharge_dt',
-                    'patient_sex', 'surg_des']])
 
-    # datafile.to_csv('temp_save.csv')
-    # datafile.iloc[:,datafile.columns.str.contains('gender')].to_csv(os.path.join(OUT_PTH,'gender.csv'))
-    # datafile.to_csv(os.path.join(OUT_PTH,'Test_ki_maa.csv'))
+    # combining columns 'mrn' using non_null_mrn() defined above
+    datafile['medical_id'] = non_null_mrn()
+    # drop mrn variables
+    datafile = drop_cols(pd_dat=datafile,
+                         del_col_names=['mrn'])
+
+    print(datafile.head())
+    print(datafile[[
+        'admission_dt', 'surgery_dt', 'discharge_dt', 'patient_sex',
+        'prcdr_des']])
+
+    # saving data
+    datafile.to_csv(os.path.join(OUT_PTH, 'mrn_maa2.csv'))
