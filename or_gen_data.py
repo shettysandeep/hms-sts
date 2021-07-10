@@ -60,7 +60,7 @@ def non_null_mrn(col_search="mrn"):
         not_na_val = pd.notna(mrn.iloc[index, :])
         # obtain the values - so far the best way to deal with NaN
         val = mrn.loc[index, not_na_val].to_list()
-        # val is a list (with a non-blank, if available)
+        # val is a list (non-blank, if available)
         if len(val) > 0:
             col_mrn[index] = next(s for s in val if s)
         else:
@@ -73,6 +73,20 @@ def subset_select_cols(pd_dat, search_text):
     cols_select = pd_dat.columns.str.contains(search_text)
     temp_dat = pd_dat.iloc[:, cols_select]
     return temp_dat
+
+
+def find_site_id(file_name):
+    num_id = re.findall('(\d{5})', file_name)
+    return num_id
+
+
+def data_save(pd_dat: 'Pandas DataFrame',opth,name_path, ifcsv=True):
+    '''File save'''
+    if ifcsv:
+        date = datetime.now().strftime("%Y_%m_%d-%I%M%p")
+        fname=f"{name_path}_{date}"
+        otpth = os.path.join(opth,fname)
+        pd_dat.to_csv("{}.csv".format(otpth))
 
 
 if __name__ == '__main__':
@@ -92,7 +106,7 @@ if __name__ == '__main__':
     cols_to_drop = all_columns[
         all_columns.New_names.isnull()]['Old_names'].tolist()
     cols_to_rename = all_columns[all_columns.New_names.notnull()]
-    # Dictionary of renaming columns
+    # Dictionary of columns to be renamed
     old_new_cols = dict(
         zip(cols_to_rename.Old_names.tolist(),
             cols_to_rename.New_names.tolist()))
@@ -100,7 +114,8 @@ if __name__ == '__main__':
     # ~~~~ Step 2
     # Import the main dataset (roughly combined)
     # Remove unnecessary columns (cols_to_drop)
-    # Rename columns name (cols_to_rename) using the dictionary created in (old_new_cols)
+    # Rename columns name (cols_to_rename) using the dictionary
+    # created in (old_new_cols)
 
     datafile = pd.read_csv(CSV_FILE, low_memory=False)
     datafile.drop(columns=cols_to_drop, inplace=True)
@@ -109,75 +124,36 @@ if __name__ == '__main__':
 
     # Convert all date variable into Datetime objects
     date_columns = datafile.columns[datafile.columns.str.contains('dt')]
-    non_date_cols = datafile.columns[~datafile.columns.str.contains('dt')]
+    # non_date_cols = datafile.columns[~datafile.columns.str.contains('dt')]
     for cols in date_columns:
         datafile[cols] = datafile[cols].apply(pd.to_datetime, errors='coerce')
 
     # drop columns with no values
     datafile.dropna(how="all", axis=1, inplace=True)
 
+    # ************* Start combining similar variables **********
     #~~~~~~~~~~~ ADMIT, SURGERY, DISCHARGE ~~~~~~~~
-    # combine similar columns- admit, surgery, discharge
-    datafile = combine_cols(datafile, 'admission_dt', 'admit_dt', func=max)
-    datafile = combine_cols(datafile, 'surgery_dt', 'surg_dt', func=max)
-    datafile = combine_cols(datafile, 'discharge_dt', 'disch_dt', func=max)
-    # delete date columns after combining
+    COLS_DT = {
+        'admit_dt': 'ADMISSION_DT',
+        'surg_dt': 'SURGERY_DT',
+        'disch_dt': 'DISCHARGE_DT',
+        'gender': 'PATIENT_SEX'
+    }
+
+    for key, val in COLS_DT.items():
+        if key == 'gender':
+            datafile = combine_cols(datafile, val, key,
+                                    func=non_blank_value)
+        else:
+            datafile = combine_cols(datafile, val, key, func=max)
     datafile = drop_cols(pd_dat=datafile,
-                         del_col_names=['admit_dt', 'surg_dt', 'disch_dt'])
+                         del_col_names=list(COLS_DT.keys()))
 
-    # ~~~~~~~~~~~ PROCEDURE ~~~~~~~~~~~~
-    # combine columns with procedure columns
-    # datafile['PRCDR'] = non_null_mrn('procedure')
-    # drop columns with procedure
-    # datafile = drop_cols(pd_dat=datafile, del_col_names=['procedure'])
-
-    # ~~~~~~~~~~~~ PROCEDURE DESCRIPTION ~~~~~~~~~~
-    # ~~~~~~~~~~~ PROCEDURE ~~~~~~~~~~~~
-    # combine columns with procedure columns
-    # datafile['PRCDR_DES'] = non_null_mrn('proc_des')
-    # drop columns with procedure
-    # datafile = drop_cols(pd_dat=datafile, del_col_names=['proc_des'])
-
-    # ~~~~~~~~~~ GENDER ~~~~~~~~~~~~~
-    # combine gender variables
-    datafile = combine_cols(datafile,
-                            'patient_sex',
-                            'gender',
-                            func=non_blank_value)
-    # drop columns with gender
-    # datafile = drop_cols(pd_dat=datafile, del_col_names=['gender'])
-
-    # ~~~~~~~~ MRN ~~~~~~~~~~~~~~~~~
-    # combining columns 'mrn' using non_null_mrn() defined above
-    # datafile['medical_id'] = non_null_mrn()
-    # drop mrn variables
-    # datafile = drop_cols(pd_dat=datafile, del_col_names=['mrn'])
-
-
-    # ~~~~~~~~~~~ RECORD ID ~~~~~~~~~~~
-    # datafile['RCID'] = non_null_mrn('rec')
-    # datafile = drop_cols(pd_dat=datafile, del_col_names=['rec'])
-    # rec=datafile.iloc[:,datafile.columns.str.contains('rec')]
-    # datafile=combine_cols(datafile,
-                          # 'RCID',
-                          # 'rec')
-
-    # rec = subset_select_cols(datafile, 'rec')
-    # rec.to_csv(os.path.join(out_pth, 'rec2.csv'))
-    # print(subset_select_cols(datafile,'rec').head())
-
-
-    
-    # print(datafile[[
-        # 'admission_dt', 'surgery_dt', 'discharge_dt', 'patient_sex',
-        # 'prcdr_des']])
-
-    # saving data
-    # datafile.to_csv(os.path.join(OUT_PTH, 'rec_cols2.csv'))
+    # ~~~~~~~~~~ PROCEDURE, PATIENT ID, RECORD ID~~~~~~~~~~
 
     COLS_COMBINE = {
         # KEY - Columns to search and combine
-        # VALUE - Name to the combined variable
+        # VALUE - Name for the combined variable
         'proc_des':'PRCDR_DES',
         'mrn': 'MEDICAL_ID',
         'rec': 'RCD_ID',
@@ -186,10 +162,13 @@ if __name__ == '__main__':
     }
 
     for key, val in COLS_COMBINE.items():
-        datafile['key'] = non_null_mrn(key)
+        datafile[val] = non_null_mrn(key)
 
     datafile = drop_cols(pd_dat=datafile,
                          del_col_names = list(COLS_COMBINE.keys()))
 
     print(datafile.head())
     print(datafile.columns.to_list())
+    data_save(pd_dat=datafile,
+              opth=OUT_PTH,
+              name_path='all_combined')
