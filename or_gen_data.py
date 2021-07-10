@@ -43,9 +43,10 @@ def non_blank_value(x):
 
 
 def non_null_mrn(col_search="mrn"):
-    """Specific function to obtain non-null values from a columns of mrn
+    """Function to obtain non-null values from a columns of mrn
     (medical record number). Applicable to a set of columns with string
-    and integer values, etc
+    and integer values, etc. Searches for a non-null value along the
+    selected rows.
 
     Returns a pandas Series
     """
@@ -115,6 +116,7 @@ if __name__ == '__main__':
     # drop columns with no values
     datafile.dropna(how="all", axis=1, inplace=True)
 
+    #~~~~~~~~~~~ ADMIT, SURGERY, DISCHARGE ~~~~~~~~
     # combine similar columns- admit, surgery, discharge
     datafile = combine_cols(datafile, 'admission_dt', 'admit_dt', func=max)
     datafile = combine_cols(datafile, 'surgery_dt', 'surg_dt', func=max)
@@ -123,32 +125,71 @@ if __name__ == '__main__':
     datafile = drop_cols(pd_dat=datafile,
                          del_col_names=['admit_dt', 'surg_dt', 'disch_dt'])
 
-    # combine columns with procedure description
-    datafile = combine_cols(datafile,
-                            'prcdr_des',
-                            'procedure',
-                            func=non_blank_value)
+    # ~~~~~~~~~~~ PROCEDURE ~~~~~~~~~~~~
+    # combine columns with procedure columns
+    # datafile['PRCDR'] = non_null_mrn('procedure')
     # drop columns with procedure
-    datafile = drop_cols(pd_dat=datafile, del_col_names=['procedure'])
+    # datafile = drop_cols(pd_dat=datafile, del_col_names=['procedure'])
+
+    # ~~~~~~~~~~~~ PROCEDURE DESCRIPTION ~~~~~~~~~~
+    # ~~~~~~~~~~~ PROCEDURE ~~~~~~~~~~~~
+    # combine columns with procedure columns
+    # datafile['PRCDR_DES'] = non_null_mrn('proc_des')
+    # drop columns with procedure
+    # datafile = drop_cols(pd_dat=datafile, del_col_names=['proc_des'])
+
+    # ~~~~~~~~~~ GENDER ~~~~~~~~~~~~~
     # combine gender variables
     datafile = combine_cols(datafile,
                             'patient_sex',
                             'gender',
                             func=non_blank_value)
     # drop columns with gender
-    datafile = drop_cols(pd_dat=datafile, del_col_names=['gender'])
+    # datafile = drop_cols(pd_dat=datafile, del_col_names=['gender'])
 
-
+    # ~~~~~~~~ MRN ~~~~~~~~~~~~~~~~~
     # combining columns 'mrn' using non_null_mrn() defined above
-    datafile['medical_id'] = non_null_mrn()
+    # datafile['medical_id'] = non_null_mrn()
     # drop mrn variables
-    datafile = drop_cols(pd_dat=datafile,
-                         del_col_names=['mrn'])
+    # datafile = drop_cols(pd_dat=datafile, del_col_names=['mrn'])
 
-    print(datafile.head())
-    print(datafile[[
-        'admission_dt', 'surgery_dt', 'discharge_dt', 'patient_sex',
-        'prcdr_des']])
+
+    # ~~~~~~~~~~~ RECORD ID ~~~~~~~~~~~
+    # datafile['RCID'] = non_null_mrn('rec')
+    # datafile = drop_cols(pd_dat=datafile, del_col_names=['rec'])
+    # rec=datafile.iloc[:,datafile.columns.str.contains('rec')]
+    # datafile=combine_cols(datafile,
+                          # 'RCID',
+                          # 'rec')
+
+    # rec = subset_select_cols(datafile, 'rec')
+    # rec.to_csv(os.path.join(out_pth, 'rec2.csv'))
+    # print(subset_select_cols(datafile,'rec').head())
+
+
+    
+    # print(datafile[[
+        # 'admission_dt', 'surgery_dt', 'discharge_dt', 'patient_sex',
+        # 'prcdr_des']])
 
     # saving data
-    datafile.to_csv(os.path.join(OUT_PTH, 'mrn_maa2.csv'))
+    # datafile.to_csv(os.path.join(OUT_PTH, 'rec_cols2.csv'))
+
+    COLS_COMBINE = {
+        # KEY - Columns to search and combine
+        # VALUE - Name to the combined variable
+        'proc_des':'PRCDR_DES',
+        'mrn': 'MEDICAL_ID',
+        'rec': 'RCD_ID',
+        'patient_id': 'PAT_ID',
+        'procedure': 'PRCDR'
+    }
+
+    for key, val in COLS_COMBINE.items():
+        datafile['key'] = non_null_mrn(key)
+
+    datafile = drop_cols(pd_dat=datafile,
+                         del_col_names = list(COLS_COMBINE.keys()))
+
+    print(datafile.head())
+    print(datafile.columns.to_list())
