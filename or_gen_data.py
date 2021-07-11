@@ -147,11 +147,26 @@ if __name__ == '__main__':
 
     datafile = drop_cols(pd_dat=datafile,
                          del_col_names=list(COLS_DT.keys()))
-    #### END APPROACH
+
     # Add SITE ID
     datafile['SITE_ID'] = datafile['filename'].apply(find_site_id)
+
+    # Organize cols
+    cols_order = ["SITE_ID",
+                  "RCD_ID",
+                  "PAT_ID",
+                  "MEDICAL_ID",
+                  "PATIENT_SEX",
+                  "ADMISSION_DT",
+                  "SURGERY_DT",
+                  "DISCHARGE_DT",
+                  "PRCDR",
+                  "PRCDR_DES",
+                  "filename"]
+
+    datafile = datafile[cols_order]
+
     print(datafile.head())
     print(datafile.columns.to_list())
-    data_save(pd_dat=datafile,
-              opth=OUT_PTH,
-              name_path='Clean_Comb_OR')
+    # Save Dataset
+    data_save(pd_dat=datafile, opth=OUT_PTH, name_path='Clean_Comb_OR')
