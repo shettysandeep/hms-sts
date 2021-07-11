@@ -12,6 +12,11 @@ following columns --
 
  [id, mrn, gender, admit date, surgery date, discharge date, procedure]
 
+This takes two input datasets:
+1. (OR_combined..xlsx)Roughly appended data from all sites (with loosely selected key variables)
+2. (Record_Cols...xlsx) This data has a list of selected variables above  and only relevant
+   variables have a new name. Variables (old) without a new name are dropped from the final dataset.
+ 
 """
 import os, re
 import pandas as pd
@@ -28,11 +33,6 @@ def drop_cols(pd_dat, del_col_names):
     except:
         print('del_col_names must be a list')
     return pd_dat
-
-
-# def non_blank_value(x):
-    # """x is pandas series, int, not-empty"""
-    # return x[x.notnull()]
 
 
 def non_null_mrn(col_search="mrn"):
@@ -70,18 +70,18 @@ def subset_select_cols(pd_dat, search_text):
 
 def find_site_id(file_name):
     num_id = re.findall('(\d{5})', file_name)
-    if len(num_id)>0:
+    if len(num_id) > 0:
         return num_id[0]
     else:
         return ""
 
 
-def data_save(pd_dat: 'Pandas DataFrame',opth,name_path, ifcsv=True):
+def data_save(pd_dat: 'Pandas DataFrame', opth, name_path, ifcsv=True):
     '''File save'''
     if ifcsv:
         date = datetime.now().strftime("%Y_%m_%d-%I%M%p")
-        fname=f"{name_path}_{date}"
-        otpth = os.path.join(opth,fname)
+        fname = f"{name_path}_{date}"
+        otpth = os.path.join(opth, fname)
         pd_dat.to_csv("{}.csv".format(otpth))
 
 
@@ -89,7 +89,8 @@ if __name__ == '__main__':
 
     # File path
     FLDR_PTH = '/Users/sandeep/Documents/1-PROJECTS/sts/reports'
-    FILE_NAME = 'OR_combined_data_2021_07_06-0403PM.csv'
+    # FILE_NAME = 'OR_combined_data_2021_07_06-0403PM.csv' OLD ONE
+    FILE_NAME = 'OR_combined_data_2021_07_11-0502PM.csv' # Updated with new sites
     OUT_PTH = r'/Users/sandeep/Documents/1-PROJECTS/sts/reports'
 
     CSV_FILE = os.path.join(FLDR_PTH, FILE_NAME)
@@ -120,21 +121,20 @@ if __name__ == '__main__':
 
     # Convert all date variable into Datetime objects
     date_columns = datafile.columns[datafile.columns.str.contains('dt')]
-    # non_date_cols = datafile.columns[~datafile.columns.str.contains('dt')]
     for cols in date_columns:
         datafile[cols] = datafile[cols].apply(pd.to_datetime, errors='coerce')
 
     # drop columns with no values
     datafile.dropna(how="all", axis=1, inplace=True)
 
-
+    # ~~~ COMBINE COLUMNS
     # KEY - Columns to search and combine
     # VALUE - Name for the combined variable
     COLS_DT = {
         'admit_dt': 'ADMISSION_DT',
         'surg_dt': 'SURGERY_DT',
         'disch_dt': 'DISCHARGE_DT',
-        'proc_des':'PRCDR_DES',
+        'proc_des': 'PRCDR_DES',
         'mrn': 'MEDICAL_ID',
         'rec': 'RCD_ID',
         'patient_id': 'PAT_ID',
@@ -145,24 +145,17 @@ if __name__ == '__main__':
     for key, val in COLS_DT.items():
         datafile[val] = non_null_mrn(key)
 
-    datafile = drop_cols(pd_dat=datafile,
-                         del_col_names=list(COLS_DT.keys()))
+    datafile = drop_cols(pd_dat=datafile, del_col_names=list(COLS_DT.keys()))
 
     # Add SITE ID
     datafile['SITE_ID'] = datafile['filename'].apply(find_site_id)
 
     # Organize cols
-    cols_order = ["SITE_ID",
-                  "RCD_ID",
-                  "PAT_ID",
-                  "MEDICAL_ID",
-                  "PATIENT_SEX",
-                  "ADMISSION_DT",
-                  "SURGERY_DT",
-                  "DISCHARGE_DT",
-                  "PRCDR",
-                  "PRCDR_DES",
-                  "filename"]
+    cols_order = [
+        "SITE_ID", "RCD_ID", "PAT_ID", "MEDICAL_ID", "PATIENT_SEX",
+        "ADMISSION_DT", "SURGERY_DT", "DISCHARGE_DT", "PRCDR", "PRCDR_DES",
+        "filename"
+    ]
 
     datafile = datafile[cols_order]
 
