@@ -1,7 +1,10 @@
 """
+
 Temp content: Class approach to parsing and combining excel files
 __author__: Sandeep Shetty
 __date__: June 20, 2021
+
+
 """
 import os
 import re
@@ -15,31 +18,25 @@ import fitz
 class ParseORLogs:
     """ Parse OR log Excel files."""
 
-
     def __init__(self):
         self._pth = ''
         self._fname = ''
-
 
     @property
     def pth(self):
         return self._pth
 
-
     @property
     def fname(self):
         return self._fname
-
 
     @pth.setter
     def pth(self, filepath):
         self._pth = filepath
 
-
     @fname.setter
     def fname(self, filename):
         self._fname=filename
-
 
     def read_files(self, visible_sheets_only=True):
         if visible_sheets_only:
@@ -50,16 +47,15 @@ class ParseORLogs:
             dat=pd.read_excel(self._fname, sheet_name=None)
             return dat
 
-
-    def get_hidden_sheets(self, excel_file):
+    @staticmethod
+    def get_hidden_sheets(excel_file):
         """Return a list of un-hidden sheet names from an Excel workbook"""
         dat = pd.ExcelFile(excel_file)
         sheet_list = []
         for sheet in dat.book.sheets():
             if sheet.visibility==0:
-                sheet_list.append(sheet.name())
+                sheet_list.append(sheet.name)
         return sheet_list
-
 
     def gather_xl_files(self):
         """
@@ -67,13 +63,15 @@ class ParseORLogs:
         Input : Directory
         Output : List of Excel file pathnames
         """
-        all_file = [os.path.join(self._pth, f)
-                    for f in os.listdir(self._pth) if '.DS' not in f]
-        print(all_file)
+        try:
+            if isdir(self._pth):
+                all_file = [os.path.join(self._pth, f)
+                            for f in os.listdir(self._pth) if '.DS' not in f]
+                xl_files = [f for f in all_file if re.search('(xls|csv)', os.path.splitext(f)[1])]
+        except ValueError:
+            print("Not a Directory")
 
-        xl_files = [f for f in all_file if re.search('(xls|csv)', os.path.splitext(f)[1])]
         return xl_files
-
 
     def parse_excel(self, file_name, search_term):
         """
@@ -81,7 +79,6 @@ class ParseORLogs:
         Ignore hidden sheets, and drop blank columns.
         Combine data from different sheets within a workbook,
         and add the sheet name as a column in the  DataFrame
-
         """
         print(file_name)
         dat = self.read_files(file_name)
@@ -112,13 +109,12 @@ class ParseORLogs:
             #print(newdat)
         return newdat
 
-
 if __name__ == '__main__':
 
-    mypth = '/Users/sandeep/Documents/1-PROJECTS/sts/hms_data/acsd/or_log_data/test_files/'
+    mypth = '/Users/sandeep/Documents/1-PROJECTS/sts/hms_data/acsd/or_log_data/'
     parseehr=ParseORLogs()
     parseehr.pth=mypth
-    print(parseehr.gather_xl_files())
+    print(parseehr.xl_files)
     # parseehr.unzip_file(new_folder='zipped')
     # dat=parseehr.read_files('Audit List December 2019.xlsx')
     # columns_term = "Age|Date|DOB|DT|DOS"

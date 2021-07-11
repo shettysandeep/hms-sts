@@ -41,20 +41,24 @@ def gather_files(file_dir, file_type='(xls|csv)'):
 def parse_excel(filepath, search_term):
     '''
     Loop through sheets in an Excel file.
-    Append each sheet with an identifier into a DataFrame
+    Combine data from different sheets into one large dataset,
+    Append each sheet with an identifier into a DataFrame.
     '''
     dat = read_files(filepath)
     newdat = pd.DataFrame()
     for keys in dat.keys():
         # Excel with multiple spreadsheets
         dat2 = dat[keys]
-        # Check default columns by Pandas are not Unnamed
         dat2.reset_index(inplace=True)
+        # Check default columns by Pandas are not Unnamed
         cond1 = dat2.columns.str.contains('Unnamed:').any()
-        print(dat2.columns)
-        print("First {}".format(cond1))
+        # print(dat2.columns)
+        # print("First {}".format(cond1))
         if cond1:
-            # If Unnamed then find the real columns
+            # If Unnamed columns then find the real columns
+            # Multi-index in excel files (with merged cols, etc.)
+            # Look for the real columns (names) that matter
+            # These are columns with text of interest such as age, birth, date of surgery, etc.
             for ind in dat2.index:
                 cond = dat2.loc[ind].str.contains(search_term, case=False)
                 print("Dat2 loc")
@@ -74,21 +78,19 @@ def parse_excel(filepath, search_term):
         # print(newdat)
     return newdat
 
-
-def clean_data(dataset, col_replace, search_term):
-    """Clean data: replace columns names of one DataFrame per sit"""
-    dat_new = parse_excel(dataset, search_term)
-    print("Parsed well~~~~~\n")
-    print(dat_new.head(2))
-    dat_new.columns = dat_new.columns.str.lower()
-    all_columns = dat_new.columns.tolist()
-    print(all_columns)
-    for col in all_columns:
-        for item, val in col_replace.items():
-            if re.search(item, col):
-                dat_new.rename(columns={col: val}, inplace=True)
-    return dat_new
-
+# def clean_data(dataset, col_replace, search_term):
+#     """Clean data: replace columns names of one DataFrame per sit"""
+#     dat_new = parse_excel(dataset, search_term)
+#     print("Parsed well~~~~~\n")
+#     print(dat_new.head(2))
+#     dat_new.columns = dat_new.columns.str.lower()
+#     all_columns = dat_new.columns.tolist()
+#     print(all_columns)
+#     for col in all_columns:
+#         for item, val in col_replace.items():
+#             if re.search(item, col):
+#                 dat_new.rename(columns={col: val}, inplace=True)
+#     return dat_new
 
 def clean_data_app2(dataset, col_replace, search_term):
     """Clean data: replace columns names of one DataFrame per sit"""
@@ -109,7 +111,6 @@ def clean_data_app2(dataset, col_replace, search_term):
     print(dat_new.shape)
     return dat_new
 
-
 def dupe_columns_clean(dataset):
     """Handles duplicate columns in dataset.
     Adds _v# to each duplicated column"""
@@ -127,7 +128,6 @@ def dupe_columns_clean(dataset):
             new_col_list.append(items[0])
     dataset.columns = new_col_list
     return dataset
-
 
 def find_site_id(file_name):
     """ Extract 5-digit number from string"""
@@ -205,8 +205,8 @@ if __name__ == '__main__':
         datnew2 = datnew2.append(clean_dataset)
     """
 
-    # datnew2 = pd.DataFrame()
-    dict_columns = {}
+    datnew2 = pd.DataFrame()
+    # dict_columns = {}
     for key, fil in enumerate(f):
         print(fil)
         clean_dataset = clean_data_app2(dataset=fil,
@@ -217,11 +217,22 @@ if __name__ == '__main__':
         col_dupe_cnd = clean_dataset.columns.duplicated().any()
         if col_dupe_cnd:
             clean_dataset = dupe_columns_clean(dataset=clean_dataset)
-        dict_columns[excel_name] = clean_dataset.columns.tolist()
-
-        # datnew2 = pd.concat([datnew2, clean_dataset],
-                            # axis=0).reset_index(drop=True)
-    col_dat = pd.DataFrame.from_dict(dict_columns, orient='index')
-    data_save(col_dat, OUT_PTH, 'OR_combined_cols')
+        # dict_columns[excel_name] = clean_dataset.columns.tolist()
+        datnew2 = pd.concat([datnew2, clean_dataset],
+                            axis=0).reset_index(drop=True)
+    # col_dat = pd.DataFrame.from_dict(dict_columns, orient='index')
+    # data_save(col_dat, OUT_PTH, 'OR_combined_cols')
     # saving data for analysis
-    # data_save(datnew2,OUT_PTH,'OR_combined')
+    data_save(datnew2,OUT_PTH,'OR_combined_data')
+
+    # ~~~~~~~~~~ Intermediate end ~~~~~~~~~~~
+
+    # NOTES
+    # We need to continue working with combined dataset (datanew2)
+    # We need to filter the columns further.
+    # The relevant columns by each site are in the below filename
+    # Record_Cols_2021_07_06-1111AM_FINALLIST_COLS.csv
+    # The rest of the analysis to clean up the above dataset is in
+    # 'or_gen_data.py', which is available here
+    # https://github.com/shettysandeep/hms-sts
+

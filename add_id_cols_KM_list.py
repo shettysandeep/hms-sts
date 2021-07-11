@@ -6,9 +6,10 @@ __date__: July 02, 2021
 Returns a list of columns that includes identifying variables such as Record
 ID/ STS ID. These variables identify the site and record within the ACSD master
 spreadsheet. Katie's list of columns (by site) did not include these variables.
-I'm adding these variables to the list. The approach is to retrieve these
-variables from the original excel submissions and then append it to Katie's
-list.
+I'm adding these variables to the list.
+
+The approach is to retrieve these variables from the original excel submissions
+and then append it to Katie's list.
 
 """
 
@@ -26,7 +27,6 @@ def obtain_non_null_values(dat):
         val = dat.iloc[index, non_null].tolist()[1:]
         newdat[key] = val
     return newdat
-
 
 def add_record_id_cols(data_file, search_term):
     """Returns a list of columns that includes identifying variables such as Record
@@ -49,7 +49,6 @@ def add_record_id_cols(data_file, search_term):
             if re.search(search_term, items, re.IGNORECASE)
         ]
     return cols_by_site
-
 
 if __name__ == '__main__':
     # Directory
@@ -90,6 +89,6 @@ if __name__ == '__main__':
         final_dict[key] = set(val)
 
     final_dat = pd.DataFrame.from_dict(final_dict, orient='index')
-    h.data_save(final_dat, O_DIRECT, "Record_Cols")
+    h.data_save(final_dat, FLDR, "Record_Cols")
 
 #~~~ END
