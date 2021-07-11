@@ -169,7 +169,6 @@ surgeon department,,
 case_type,,
 procedure_date_dt,surg_dt,
 pacu_in_date_time,,
-age_v8,,
 procedure icd desc,,
 admission_type,,
 scheduled procedure start  time,,
@@ -204,7 +203,6 @@ procedure approach,,
 procedure alias,proc_alias,
 procedure icd ,,
 encounter_provider,,
-surgeon_v50,,
 sts recordid,record_id,
 patient_name,,
 patient in - pre-op,,
@@ -391,3 +389,7 @@ scheduled case duration,,
 patient age in years (at time of surgery),,
 case level,,
 case duration,,
+sts_record_id,record_id,add 7/11
+surg_date,surg_dt,add 7/11
+sts case #,record_id,add 7/11
+surg date,surg_dt,add 7/11
