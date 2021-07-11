@@ -18,13 +18,6 @@ import pandas as pd
 from datetime import datetime
 
 
-def combine_cols(pd_dat, name_comb_col, col_name_search, func):
-    """Combining all similarly titles variables"""
-    temp_cols = pd_dat.columns.str.contains(col_name_search)
-    pd_dat[name_comb_col] = pd_dat.iloc[:, temp_cols].apply(func, axis=1)
-    return pd_dat
-
-
 def drop_cols(pd_dat, del_col_names):
     """drop columns that contain the text in del_col_names"""
     try:
@@ -37,9 +30,9 @@ def drop_cols(pd_dat, del_col_names):
     return pd_dat
 
 
-def non_blank_value(x):
-    """x is pandas series, int, not-empty"""
-    return x[x.notnull()]
+# def non_blank_value(x):
+    # """x is pandas series, int, not-empty"""
+    # return x[x.notnull()]
 
 
 def non_null_mrn(col_search="mrn"):
@@ -77,7 +70,10 @@ def subset_select_cols(pd_dat, search_text):
 
 def find_site_id(file_name):
     num_id = re.findall('(\d{5})', file_name)
-    return num_id
+    if len(num_id)>0:
+        return num_id[0]
+    else:
+        return ""
 
 
 def data_save(pd_dat: 'Pandas DataFrame',opth,name_path, ifcsv=True):
@@ -131,44 +127,31 @@ if __name__ == '__main__':
     # drop columns with no values
     datafile.dropna(how="all", axis=1, inplace=True)
 
-    # ************* Start combining similar variables **********
-    #~~~~~~~~~~~ ADMIT, SURGERY, DISCHARGE ~~~~~~~~
+
+    # KEY - Columns to search and combine
+    # VALUE - Name for the combined variable
     COLS_DT = {
         'admit_dt': 'ADMISSION_DT',
         'surg_dt': 'SURGERY_DT',
         'disch_dt': 'DISCHARGE_DT',
-        'gender': 'PATIENT_SEX'
-    }
-
-    for key, val in COLS_DT.items():
-        if key == 'gender':
-            datafile = combine_cols(datafile, val, key,
-                                    func=non_blank_value)
-        else:
-            datafile = combine_cols(datafile, val, key, func=max)
-    datafile = drop_cols(pd_dat=datafile,
-                         del_col_names=list(COLS_DT.keys()))
-
-    # ~~~~~~~~~~ PROCEDURE, PATIENT ID, RECORD ID~~~~~~~~~~
-
-    COLS_COMBINE = {
-        # KEY - Columns to search and combine
-        # VALUE - Name for the combined variable
         'proc_des':'PRCDR_DES',
         'mrn': 'MEDICAL_ID',
         'rec': 'RCD_ID',
         'patient_id': 'PAT_ID',
-        'procedure': 'PRCDR'
+        'procedure': 'PRCDR',
+        'gender': 'PATIENT_SEX'
     }
 
-    for key, val in COLS_COMBINE.items():
+    for key, val in COLS_DT.items():
         datafile[val] = non_null_mrn(key)
 
     datafile = drop_cols(pd_dat=datafile,
-                         del_col_names = list(COLS_COMBINE.keys()))
-
+                         del_col_names=list(COLS_DT.keys()))
+    #### END APPROACH
+    # Add SITE ID
+    datafile['SITE_ID'] = datafile['filename'].apply(find_site_id)
     print(datafile.head())
     print(datafile.columns.to_list())
     data_save(pd_dat=datafile,
               opth=OUT_PTH,
-              name_path='all_combined')
+              name_path='Clean_Comb_OR')
