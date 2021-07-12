@@ -7,3 +7,7 @@ ipynb_files/
 #sts_*.py
 test_class.py
 __pycache__/
+/add_id_cols_KM_list.py
+/class_approach.py
+/ehr_files_report.py
+sts_*
