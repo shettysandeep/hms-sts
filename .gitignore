@@ -2,7 +2,8 @@ ipynb_files/
 *.org
 .DS*
 .ipynb_checkpoints
-add_id_cols_KM_list.py
-class_approach.py
-sts_*.py
+#add_id_cols_KM_list.py
+#class_approach.py
+#sts_*.py
 test_class.py
+__pycache__/
