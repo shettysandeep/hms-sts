@@ -1,17 +1,17 @@
 # HMS-STS Audit Work
-## Preprocessing of OR log files received from the  sites participating in this audit. 
+## Preprocessing of OR log files received from sites participating in the audit. 
 
 Most participating sites submitted their OR log data (for the requested date
-range) in Excel format. Few sites submitted PDFs of hand-written documents (to
+range) in Excel format. Few sites submitted scanned PDFs of handwritten documents (to
 be processed separately). The excel files were cleaned and combined to produce a
-final dataset with only variables necessary for the audit {record
+final dataset with variables necessary for the audit {record
 id, surgery date, admission date, discharge date, procedure}
 
-`or_parsing_data.py` parses each sheet in an Excel workbook
-(ignores hidden sheets) and generates a dataframe at the site-level, which is
-subsequently combined to form a **pooled dataset** that includes all sites that
-submitted OR data. Since the OR logs had more information than requested, this
-script whittles the list of variables by loosely searching for key texts, such as
+`or_parsing_data.py` parses each sheet in an Excel workbook (ignores hidden
+sheets) and generates a dataframe at the site-level, which is subsequently
+combined to form a **pooled dataset** that includes all sites that submitted OR
+data. Since the OR logs had more information than requested, this script
+whittles the list of variables by loosely searching for key texts, such as
 record, id, procedure, etc. in the columns.
 
 `Rename_columns_file.csv` is a spreadsheet containing two key columns. The first
