@@ -14,17 +14,17 @@ data. Since the OR logs had more information than requested, this script
 whittles the list of variables by loosely searching for key texts, such as
 record, id, procedure, etc. in the columns.
 
-`Rename_columns_file.csv` is a spreadsheet containing two key columns. The first
-contains variable names from the *pooled dataset* obtained in the script above.
-The second column serves two purposes. By containing new column names for
-variables containing similar information but differ in names in the original
-submission (age vs patient age), it sets the stage for combining these variables
-in the dataset, and helps retain only relevant colums by means of having no
-value for columns that are irrelevant for the final dataset. That is, any
-variable name without an entry for a new name will get dropped from the dataset.
-This spreadsheet was constructed by taking the columns from the *pooled
-dataset*, then reviewing manually to select the necessary columns and assigning
-new names.
+`Rename_columns_file.csv` is a spreadsheet containing two columns. The first
+contains variable names from the *pooled dataset* obtained via the above script.
+The second column defines a new name for the variables with two objectives. A
+singular new column names for variables containing similar information but
+differ in names in the original submissions (such as, age vs patient age).
+However, not all variables are assigned a new name. New name assigned only to
+variables that are of interest for the auditing exercise. Thus, the absence of a
+value in the new name column is used as a condition to remove variables that are
+not needed. This spreadsheet was constructed manually by taking the columns from
+the *pooled dataset*, then reviewing to select the necessary columns and
+the assignment of new names.
 
 `or_gen_data.py` operates on the *pooled dataset* obtained in
 *or_parsing_data.py*. Uses information from *Rename_columns_file.csv*, to drop
