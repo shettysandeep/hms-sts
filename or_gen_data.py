@@ -90,7 +90,8 @@ if __name__ == '__main__':
     # File path
     FLDR_PTH = '/Users/sandeep/Documents/1-PROJECTS/sts/reports'
     # FILE_NAME = 'OR_combined_data_2021_07_06-0403PM.csv' OLD ONE
-    FILE_NAME = 'OR_combined_data_2021_07_11-0502PM.csv' # Updated with new sites
+    FILE_NAME = 'OR_combined_data_2021_07_13-0727PM.csv'
+    #FILE_NAME = 'OR_combined_data_2021_07_13-1203PM.csv' # Updated with new sites
     OUT_PTH = r'/Users/sandeep/Documents/1-PROJECTS/sts/reports'
 
     CSV_FILE = os.path.join(FLDR_PTH, FILE_NAME)
@@ -125,7 +126,7 @@ if __name__ == '__main__':
         datafile[cols] = datafile[cols].apply(pd.to_datetime, errors='coerce')
 
     # drop columns with no values
-    datafile.dropna(how="all", axis=1, inplace=True)
+    # datafile.dropna(how="all", axis=1, inplace=True)
 
     # ~~~ COMBINE COLUMNS
     # KEY - Columns to search and combine

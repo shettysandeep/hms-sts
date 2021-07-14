@@ -45,15 +45,18 @@ def parse_excel(filepath, search_term):
     Append each sheet with an identifier into a DataFrame.
     '''
     dat = read_files(filepath)
+    print("First entry")
+    
     newdat = pd.DataFrame()
     for keys in dat.keys():
         # Excel with multiple spreadsheets
         dat2 = dat[keys]
+        print(dat2.head())
         dat2.reset_index(inplace=True)
         # Check default columns by Pandas are not Unnamed
         cond1 = dat2.columns.str.contains('Unnamed:').any()
         # print(dat2.columns)
-        # print("First {}".format(cond1))
+        print("First {}".format(cond1))
         if cond1:
             # If Unnamed columns then find the real columns
             # Multi-index in excel files (with merged cols, etc.)
@@ -70,12 +73,13 @@ def parse_excel(filepath, search_term):
             # Assign columns to the spreadsheet frame
             dat2.columns = dat2.loc[dat2_start].to_list()
             dat2.drop(index=dat2_start, inplace=True)
-        dat2.dropna(inplace=True)
+        # dat2.dropna(inplace=True)
         # Add a spreadsheet key before appending each sheet
         dat2['newkey'] = str(keys)
         newdat = pd.concat([newdat, dat2], axis=0).reset_index(drop=True)
         # newdat = newdat.append(dat2)
-        # print(newdat)
+        print("Yeh hain ~~~~~\n")
+        print(newdat.head())
     return newdat
 
 # def clean_data(dataset, col_replace, search_term):
@@ -95,11 +99,14 @@ def parse_excel(filepath, search_term):
 def clean_data_app2(dataset, col_replace, search_term):
     """Clean data: replace columns names of one DataFrame per sit"""
     dat_new = parse_excel(dataset, search_term)
+    print("what is")
+    print(dat_new.head())
     print("Parsed well~~~~~\n")
     # print(dat_new.head(2))
     dat_new.columns = dat_new.columns.str.lower()
     all_columns = dat_new.columns.tolist()
     cleaned_list = [x for x in all_columns if x == x]
+    print("Clean list ~~~~")
     print(cleaned_list)
     filter_col = []
     for col in cleaned_list:
@@ -107,6 +114,9 @@ def clean_data_app2(dataset, col_replace, search_term):
             if item in col:
                 filter_col.append(col)
     set_filter_col = list(set(filter_col))
+    print("Set filter col ~~~~")
+    print(set_filter_col)
+    print(dat_new.head())
     dat_new = dat_new[set_filter_col]
     print(dat_new.shape)
     return dat_new
@@ -187,7 +197,13 @@ if __name__ == '__main__':
                  "id": "medical id",
                  "gender": "gender",
                  "record" : "record",
-                 "sts": "sts id"
+                 "sts": "sts id",
+                 "dos": "surgery dt",
+                 "cabg": "procedure",
+                 'hosp_disch': "discharge",
+                 "hosp_admsn_time": "admission date",
+                 "hosp_disch_time":"discharge date"
+
                  }
     """
     for key, fil in enumerate(f):
