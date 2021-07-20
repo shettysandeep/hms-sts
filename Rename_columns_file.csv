@@ -17,7 +17,7 @@ procedure descriptions,proc_des,
 age (on date of surgery),,
 sts record id,record_id,
 date of birth,,
-scheduled start dt/tm,,
+scheduled start dt/tm,surg_dt,
 patient in room,,
 primary procedure,procedure,added
 pt age in years (at surg),,
@@ -367,3 +367,6 @@ disch_dts,disch_dt,add 7/13
 surgery date (date),surg_dt,add 7/13
 admission date (book date),admit_dt,add 7/13
 hospital mrn #,mrn,add 7/13
+surg_dttm,surg_dt,add 7/14
+admit_dttm,admit_dt,add 7/14
+disch_dttm,disch_dt,add 7/14
