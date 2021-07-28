@@ -46,7 +46,7 @@ def parse_excel(filepath, search_term):
     '''
     dat = read_files(filepath)
     print("First entry")
-    
+
     newdat = pd.DataFrame()
     for keys in dat.keys():
         # Excel with multiple spreadsheets
@@ -202,8 +202,13 @@ if __name__ == '__main__':
                  "cabg": "procedure",
                  'hosp_disch': "discharge",
                  "hosp_admsn_time": "admission date",
-                 "hosp_disch_time":"discharge date"
-
+                 "hosp_disch_time":"discharge date",
+                 # below added 7/27 post-Katie's suggestions
+                 "fin_nbr": "patient id",
+                 "medicalrecordno": "mrn",
+                 "account_no": "patient id",
+                 "mr number": "mrn",
+                 "account number": "patient id"
                  }
     """
     for key, fil in enumerate(f):
@@ -239,6 +244,7 @@ if __name__ == '__main__':
     # col_dat = pd.DataFrame.from_dict(dict_columns, orient='index')
     # data_save(col_dat, OUT_PTH, 'OR_combined_cols')
     # saving data for analysis
+    datnew2.columns = datnew2.columns.str.strip()
     data_save(datnew2,OUT_PTH,'OR_combined_data')
 
     # ~~~~~~~~~~ Intermediate end ~~~~~~~~~~~
