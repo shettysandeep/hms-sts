@@ -33,27 +33,27 @@ def missing_files(DATA_PTH, RAW_PTH):
 def missing_report(datafile):
     dat = pd.read_csv(datafile)
     newdat = pd.DataFrame()
-    for nm in set(dat.filename.tolist()):
-        temp_dat = dat[dat['filename']==nm]
+    for nm in set(dat.SITE_ID):
+        temp_dat = dat.loc[dat['SITE_ID']==nm]
         siteid = temp_dat.SITE_ID.tolist()[0]
         lenth = temp_dat.shape[0]
         temp_dat=temp_dat.isnull().sum()/lenth*100
-        temp_dat['newfile']=nm
-        temp_dat['avl_site_id']=str(siteid)
+        temp_dat['Site_ID']=str(siteid)
+        temp_dat['OBS_COUNT'] = lenth
         newdat = newdat.append(temp_dat, ignore_index=True)
     # reorder Cols
-    newdat_Cols = ['avl_site_id', 'SITE_ID', 'RCD_ID','MEDICAL_ID', 'PAT_ID',
+    newdat_Cols = ['Site_ID', 'RCD_ID','MEDICAL_ID', 'PAT_ID',
                    'ADMISSION_DT', 'SURGERY_DT', 'DISCHARGE_DT', 'PRCDR',
-                   'PRCDR_DES', 'PATIENT_SEX', 'newfile']
+                   'PRCDR_DES', 'PATIENT_SEX','OBS_COUNT']
     newdat=newdat[newdat_Cols]
     return newdat
 
 
-if __name__ == '__main__': 
+if __name__ == '__main__':
     #~~~ Import Dataset
     # Path to Final Combined dataset
     PRJT_FLDR = '/Users/sandeep/Documents/1-PROJECTS/sts'
-    FILE_NAME = 'Clean_Comb_OR_2021_07_14-0510PM.csv'
+    FILE_NAME = 'Clean_Comb_OR_2021_08_18-0450PM.csv'
     DATA_PTH = os.path.join(PRJT_FLDR, 'reports', FILE_NAME)
     # Directory where the raw data are saved
     RAW_PTH = os.path.join(PRJT_FLDR, 'hms_data/acsd/or_log_data')

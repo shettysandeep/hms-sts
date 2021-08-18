@@ -90,7 +90,7 @@ if __name__ == '__main__':
     # File path
     FLDR_PTH = '/Users/sandeep/Documents/1-PROJECTS/sts/reports'
     # FILE_NAME = 'OR_combined_data_2021_07_06-0403PM.csv' OLD ONE
-    FILE_NAME = 'OR_combined_data_2021_07_13-0727PM.csv'
+    FILE_NAME = 'OR_combined_data_2021_08_18-0448PM.csv'
     #FILE_NAME = 'OR_combined_data_2021_07_13-1203PM.csv' # Updated with new sites
     OUT_PTH = r'/Users/sandeep/Documents/1-PROJECTS/sts/reports'
 

@@ -104,6 +104,7 @@ def clean_data_app2(dataset, col_replace, search_term):
     print("Parsed well~~~~~\n")
     # print(dat_new.head(2))
     dat_new.columns = dat_new.columns.str.lower()
+    # Here - need to clean up columns names (take out \t \n etc.)
     all_columns = dat_new.columns.tolist()
     cleaned_list = [x for x in all_columns if x == x]
     print("Clean list ~~~~")
@@ -205,10 +206,13 @@ if __name__ == '__main__':
                  "hosp_disch_time":"discharge date",
                  # below added 7/27 post-Katie's suggestions
                  "fin_nbr": "patient id",
-                 "medicalrecordno": "mrn",
+                 "medicalrecno": "mrn",
                  "account_no": "patient id",
                  "mr number": "mrn",
-                 "account number": "patient id"
+                 "account number": "patient id",
+                 "oper1_name":"procedure",
+                 "proc_name": 'procedure',
+                 "proc_free_text": 'procedure'
                  }
     """
     for key, fil in enumerate(f):
@@ -245,6 +249,10 @@ if __name__ == '__main__':
     # data_save(col_dat, OUT_PTH, 'OR_combined_cols')
     # saving data for analysis
     datnew2.columns = datnew2.columns.str.strip()
+    newcol= []
+    for col in datnew2.columns:
+        newcol.append(" ".join(col.split()))
+    datnew2.columns = newcol
     data_save(datnew2,OUT_PTH,'OR_combined_data')
 
     # ~~~~~~~~~~ Intermediate end ~~~~~~~~~~~
