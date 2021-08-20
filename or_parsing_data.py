@@ -4,12 +4,8 @@
 __author__: Sandeep Shetty
 __date__: June 06, 2021
 
-Code to parse OR Logs submitted as Excel workbooks. The files differ in the breadth of
-information shared (variable names, etc.). The objective is to parse,
-harmonize and combine data into one large table for comparing for auditing.
-
-Input: Path to collection of files
-Output: Combined Pandas DataFrame
+Parsing Operation Room Logs received as Excel workbooks from Hospitals and
+Health-care providers as part of the STS audit project.
 
 """
 from datetime import datetime
@@ -19,49 +15,65 @@ import pandas as pd
 
 
 def read_files(filepath):
-    """Returns .xlsx workbook as Pandas DataFrame (dictionary)"""
+    """ Returns a Dictionary of Pandas DataFrame """
     dat = pd.read_excel(filepath, sheet_name=None, index_col=0)
     return dat
 
-def gather_files(file_dir, file_type='(xls|csv)'):
-    """ Returns a list of .xls or .csv files at the given location
-
-    Keyword arguments:
-    file_dir -- Path to the folder
-    file_type -- Type of file to select - xlsx or csv
+def gather_files(folder_path, file_type='(xls|csv)'):
     """
-    all_file = [os.path.join(file_dir, f)
-                for f in os.listdir(file_dir)
+    Collects the specified types of files from a location
+
+    Parameters:
+    -----------
+    folder_path : Path to the folder
+    file_type : Type of files to collect
+
+    Returns:
+    --------
+    list: specified files with the full path at the input folder
+
+    """
+    all_file = [os.path.join(folder_path, f) for f in os.listdir(folder_path)
                 if '.DS' not in f]
-    # fil_typ = '(xls|csv)'
     keep_excel = [f for f in all_file
                   if re.search(file_type, os.path.splitext(f)[1])]
     return keep_excel
 
 def parse_excel(filepath, search_term):
-    '''
-    Loop through sheets in an Excel file.
-    Combine data from different sheets into one large dataset,
-    Append each sheet with an identifier into a DataFrame.
-    '''
+    """
+    Reads and parses excel workbooks.
+
+    Loops through all visible sheets of an excel. Combines data from different
+    sheets into one large dataset.
+
+    Returns:
+    --------
+    DataFrame: Appends parsed sheets into a DataFrame.
+
+    """
     dat = read_files(filepath)
     print("First entry")
-
     newdat = pd.DataFrame()
     for keys in dat.keys():
         # Excel with multiple spreadsheets
         dat2 = dat[keys]
         print(dat2.head())
         dat2.reset_index(inplace=True)
-        # Check default columns by Pandas are not Unnamed
+        # Check default columns are actually columns (should use search terms here)
         cond1 = dat2.columns.str.contains('Unnamed:').any()
-        # print(dat2.columns)
+        #cond1 = dat2.columns.str.contains(search_term, case=False)
         print("First {}".format(cond1))
         if cond1:
-            # If Unnamed columns then find the real columns
-            # Multi-index in excel files (with merged cols, etc.)
-            # Look for the real columns (names) that matter
-            # These are columns with text of interest such as age, birth, date of surgery, etc.
+            """
+            If default columns names are not colums, which is usually the case with
+            files that have multi-index spreadsheets with title, etc. In
+            such cases, look for the real column names. For our implementation, these are
+            columns that have {age, birth, date of surgery, etc.} in their
+            names, which are captured in the "search term" parameter. The process
+            then is to traverse each row and look for the search term in
+            values. If you find then stop use that row as the column name. 
+
+            """
             for ind in dat2.index:
                 cond = dat2.loc[ind].str.contains(search_term, case=False)
                 print("Dat2 loc")
@@ -81,20 +93,6 @@ def parse_excel(filepath, search_term):
         print("Yeh hain ~~~~~\n")
         print(newdat.head())
     return newdat
-
-# def clean_data(dataset, col_replace, search_term):
-#     """Clean data: replace columns names of one DataFrame per sit"""
-#     dat_new = parse_excel(dataset, search_term)
-#     print("Parsed well~~~~~\n")
-#     print(dat_new.head(2))
-#     dat_new.columns = dat_new.columns.str.lower()
-#     all_columns = dat_new.columns.tolist()
-#     print(all_columns)
-#     for col in all_columns:
-#         for item, val in col_replace.items():
-#             if re.search(item, col):
-#                 dat_new.rename(columns={col: val}, inplace=True)
-#     return dat_new
 
 def clean_data_app2(dataset, col_replace, search_term):
     """Clean data: replace columns names of one DataFrame per sit"""
@@ -124,7 +122,16 @@ def clean_data_app2(dataset, col_replace, search_term):
 
 def dupe_columns_clean(dataset):
     """Handles duplicate columns in dataset.
-    Adds _v# to each duplicated column"""
+
+    As data gets pulled from different spreadsheets. Same columns were
+    coexisting without any clash. The code finds the duplicated columns and
+    renames them. Adds _v# to each duplicated column name
+
+    Returns:
+    --------
+    DataFrame: Duplicated columns with names suffixed with "_v{#}" 
+
+    """
     cols_to_list = dataset.columns
     col_dupes = dataset.columns.duplicated()
     test_zip = zip(cols_to_list, col_dupes)
@@ -141,7 +148,7 @@ def dupe_columns_clean(dataset):
     return dataset
 
 def find_site_id(file_name):
-    """ Extract 5-digit number from string"""
+    """ Extracts 5-digit number from string"""
     num_id = re.findall(r'(\d{5})', file_name)
     return num_id
 
@@ -214,21 +221,6 @@ if __name__ == '__main__':
                  "proc_name": 'procedure',
                  "proc_free_text": 'procedure'
                  }
-    """
-    for key, fil in enumerate(f):
-        print(fil)
-        clean_dataset = clean_data(dataset=fil,
-                                   col_replace=list_cols,
-                                   search_term=columns_term)
-
-        # column duplicates condition
-        col_dupe_cnd = clean_dataset.columns.duplicated().any()
-        if col_dupe_cnd:
-            clean_dataset = dupe_columns_clean(dataset=clean_dataset)
-
-        #print(clean_dataset.columns.tolist())
-        datnew2 = datnew2.append(clean_dataset)
-    """
 
     datnew2 = pd.DataFrame()
     # dict_columns = {}
