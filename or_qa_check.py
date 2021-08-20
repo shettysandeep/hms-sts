@@ -40,12 +40,14 @@ def missing_report(datafile):
         temp_dat=temp_dat.isnull().sum()/lenth*100
         temp_dat['Site_ID']=str(siteid)
         temp_dat['OBS_COUNT'] = lenth
+        temp_dat['filename']=dat.filename.where(dat.SITE_ID==nm).value_counts().index[0]
         newdat = newdat.append(temp_dat, ignore_index=True)
     # reorder Cols
     newdat_Cols = ['Site_ID', 'RCD_ID','MEDICAL_ID', 'PAT_ID',
                    'ADMISSION_DT', 'SURGERY_DT', 'DISCHARGE_DT', 'PRCDR',
-                   'PRCDR_DES', 'PATIENT_SEX','OBS_COUNT']
+                   'PRCDR_DES', 'PATIENT_SEX','OBS_COUNT','filename']
     newdat=newdat[newdat_Cols]
+
     return newdat
 
 
