@@ -5,25 +5,25 @@ record id,record_id,
 discharge date,disch_dt,
 procedure description,proc_des,
 gender,gender,
-age,,
+age,age,24-Aug
 admission date,admit_dt,
-dob,,
+dob,birth_dt,24-Aug
 patient id,patient_id,
 surgery date,surg_dt,
 filename,filename,
 date of surgery,surg_dt,
 id,,
 procedure descriptions,proc_des,
-age (on date of surgery),,
+age (on date of surgery),age,24-Aug
 sts record id,record_id,
-date of birth,,
+date of birth,birth_dt,24-Aug
 scheduled start dt/tm,surg_dt,
 patient in room,,
 primary procedure,procedure,added
-pt age in years (at surg),,
+pt age in years (at surg),age,24-Aug
 primary surgeon,,
 patient name,,
-patient date of birth,,
+patient date of birth,birth_dt,24-Aug
 patient sex,gender,
 or case number,,removed
 patient out room,,
@@ -32,23 +32,23 @@ lead surgeon/provider,,
 patient age on procedure date,,
 case #,,removed
 procedure 2,,
-birth date,,
+birth date,birth_dt,24-Aug
 principal procedure,procedure,
 discharge datetime,disch_dt,
-age at procedure,,
+age at procedure,age,24-Aug
 admission datetime,admit_dt,
 provider name,,
 sex,gender,
 procedure 3,,
 surgery discharge date,disch_dt,
-age on date of surgery,,
+age on date of surgery,age,24-Aug
 account # /mrn,mrn,
 surgery admission date,admit_dt,
-patientage,,
+patientage,age,24-Aug
 surgerydate,surg_dt,
 dischargedate,disch_dt,
 orprocedurename,procedure,
-dateofbirth,,
+dateofbirth,birth_dt,24-Aug
 admitdate,admit_dt,
 sts id,record_id,
 admit date,admit_dt,
@@ -56,15 +56,15 @@ dc date,disch_dt,
 d/c date,disch_dt,
 procedure,procedure,
 procedure date,surg_dt,
-dob and age,,
+dob and age,birth_age,24-Aug
 date of discharge,disch_dt,
 date of admission,admit_dt,
-patient age,,
+patient age,age,24-Aug
 surgeon,,
 procedure,procedure,
 modified procedure,,
 admit type,,
-age(on date of surgery),,
+age(on date of surgery),age,24-Aug
 inpatient admit datetime,admit_dt,
 patient type,,
 inpatient discharge datetime,disch_dt,
@@ -84,15 +84,15 @@ sts #,record_id,
 procedure type,procedure,
 medrec number - patient id,mrn,
 surgeon name,,
-birthdate,,
+birthdate,birth_dt,24-Aug
 medical record #,mrn,
 crp_discharge_date,disch_dt,
 proceduredate,surg_dt,
-ageatsurgery,,
+ageatsurgery,age,24-Aug
 mrn #,mrn,
-age (on dos),,
-pat_age,,
-birth_date,,
+age (on dos),age,24-Aug
+pat_age,age,24-Aug
+birth_date,birth_dt,24-Aug
 pat_mrn_id,mrn,
 proc_date,surg_dt,
 hosp_admsn,admit_dt,
@@ -110,24 +110,24 @@ surgeon arrival,,
 actual surgeon name,,
 cws apptid,,
 procedure name,procedure,
-patient age,,
+patient age,age,24-Aug
 patient location,,
 medical record number,mrn,
 minutes between surgeon arrival & op start time,,
 date of admission,admit_dt,
 surgeon on time,,
 discharge provider name,,
-patient age at registration,,
+patient age at registration,age,24-Aug
 dischdate,disch_dt,
 "sts record id, surgery date",record_id,
 procedure discription,proc_des,
 case description,proc_des,
 procedure text,proc_des,
-age on surgery date,,
+age on surgery date,age,24-Aug
 sts record id,record_id,
 case procedures,procedure,
-age at surgery,,
-ageats,,
+age at surgery,age,24-Aug
+ageats,age,24-Aug
 datetime of surgery,surg_dt,
 procedure descriptiom,proc_des,
 dateofsurgery,surg_dt,
@@ -136,9 +136,9 @@ disch date,disch_dt,
 sts record id #,record_id,
 surgery dc date,surg_dt,
 opdate,surg_dt,
-pt_age,,
+pt_age,age,24-Aug
 sts record,record_id,
-date of birth,,
+date of birth,birth_dt,24-Aug
 surgeon_name,,
 or out date,,Remove disch_dt
 patient out - pre-op,,
@@ -154,7 +154,7 @@ pir_date_time,,
 case_confirmation_num,,
 optime patient type,,
 transfer/discharge from unit,,
-dob,,
+dob,birth_dt,24-Aug
 actual procedure name,proc_des,
 antibiotics administered,,
 scheduled case time,,
@@ -162,8 +162,8 @@ procedure not perf,,
 provider dictation code,,
 admit source,,
 surgeon_specialty,,
-hospital_patient_id,,
-por_date_time,,
+hospital_patient_id,patient_id,24-Aug
+por_date_time,,24-Aug
 patientout,,
 as_date_time,,
 patient ready for or,,
@@ -191,18 +191,18 @@ procedure_name,procedure,
 surgeon division,,
 sts id#,record_id,
 surg_dt,surg_dt,
-booking_dt,,
+booking_dt,,24-Aug
 case_level,,
-patient_dob,,
+patient_dob,birth_dt,24-Aug
 sts_record id,record id,
 inpatient,,
 dodisch,disch_dt,
 procedure category,procedure,
 doadm,admit_dt,
-dobirth,,
+dobirth,birth_dt,24-Aug
 dosurg,surg_dt,
 record_id,record_id,
-age,,
+age,age,24-Aug
 start date,surg_dt,
 surgery_procedures_col,procedure,
 sts patient id,record_id,
@@ -222,9 +222,9 @@ table1.mrn,mrn,
 table1.proceduretype,procedure,
 sts.gender,gender,
 sts.ss_event_id,,
-table1.age,,
+table1.age,age,24-Aug
 surgery_date,surg_dt,
-table1.dob,,
+table1.dob,birth_dt,24-Aug
 table1.dateofadmission,admit_dt,
 sts.discharge_date,disch_dt,
 table1.eventdate,,
@@ -233,7 +233,7 @@ surgery stop time,,
 date of surgery {310},surg_dt,
 sex {75},gender,
 record id {30},record_id,
-patient age {70},,
+patient age {70},age,24-Aug
 other procedure category,,
 patient out of room time,,
 surgery start time,,
@@ -267,26 +267,26 @@ operating room (surgery),,
 patient social security number,,
 dos,surg_dt,
 cabg,procedure,
-age (dos),,
+age (dos),age,24-Aug
 roomindatetime,,
 patientmrn,mrn,added
 net case,,
 roomoutdatetime,,
 actualproceduredescription,proc_des,
 sts site,,removed
-age - surgery date,,
+age - surgery date,age,24-Aug
 misc procedure,,
 pulmonary procedure,,
-birth dt,,
+birth dt,birth_dt,24-Aug
 admission,admit_dt,
 dischdttm,disch_dt,
 patientlast,,
-patientdob,,
+patientdob,birth_dt,24-Aug
 patientaccountnumber,patient_id,
-ageatsurg,,
+ageatsurg,age,24-Aug
 patientfirst,,
 procedure start time,,
-age (at surgery),,
+age (at surgery),age,24-Aug
 sts record id vendor=armus,record_id,
 actual procedure description 2,,
 actual procedure description 4,,
@@ -324,10 +324,10 @@ pt sex,gender,
 log id,,
 panel primary surgeon,,
 total number of procedures,,
-pt age at procedure,,
+pt age at procedure,age,24-Aug
 panel primary surgeon id,,
 proc date,surg_dt,
-age (on date of surgery),,
+age (on date of surgery),age,24-Aug
 case procedure,procedure,
 date of admission {305},admit_dt,
 date of discharge {315},disch_dt,
@@ -337,7 +337,7 @@ admit date/time,admit_dt,
 case create date/time,,
 scheduled start date/time,surg_dt,
 scheduled case duration,,
-patient age in years (at time of surgery),,
+patient age in years (at time of surgery),age,24-Aug
 case level,,
 case duration,,
 sts_record_id,record_id,add 7/11
@@ -364,3 +364,9 @@ performed procedure description,proc_des,add 7/28
 type of cabg,proc_des,add 7/28
 proc_free_text,proc_des,add 7/29
 oper1_name,procedure,add 7/29
+dob1,birth_dt,25-Aug
+age_new,age,25-Aug
+gender_new,gender,25-Aug
+pat gender,gender,25-Aug
+dob2,birth_dt,25-Aug
+age_new1,age,
