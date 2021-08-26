@@ -16,10 +16,11 @@ This takes two input datasets:
 1. (OR_combined..xlsx)Roughly appended data from all sites (with loosely selected key variables)
 2. (Record_Cols...xlsx) This data has a list of selected variables above  and only relevant
    variables have a new name. Variables (old) without a new name are dropped from the final dataset.
- 
+
 """
-import os, re
+import os, re, sys
 import pandas as pd
+import numpy as np
 from datetime import datetime
 
 
@@ -54,10 +55,17 @@ def non_null_mrn(col_search="mrn"):
         # obtain the values - so far the best way to deal with NaN
         val = mrn.loc[index, not_na_val].to_list()
         # val is a list (non-blank, if available)
-        if len(val) > 0:
-            col_mrn[index] = next(s for s in val if s)
+        if (key =='age'):
+            newval = [s for s in val if s !=""]
+            if newval:
+                col_mrn[index] = next(s for s in val if s !="")
+            else:
+                col_mrn[index] = None
         else:
-            col_mrn[index] = None
+            if len(val) > 0:
+                col_mrn[index] = next(s for s in val if s)
+            else:
+                col_mrn[index] = None
     return pd.Series(col_mrn)
 
 
@@ -85,12 +93,46 @@ def data_save(pd_dat: 'Pandas DataFrame', opth, name_path, ifcsv=True):
         pd_dat.to_csv("{}.csv".format(otpth))
 
 
+def clean_age_variable(dataset):
+    """
+    Operates on the DataFrame. Cleans a couple of columns manually inspected to have some parsing issues.
+    """
+    # age/gender/dob
+    dataset['dob1'] = dataset['age/gender/dob'].str.extract("(\d{1,2}/\d\d/\d{4})")
+    dataset['age_new']= dataset['age/gender/dob'].str.extract("(\d\d) y\.o\.")
+    dataset['gender_new']= dataset['age/gender/dob'].str.extract("(M|F)")
+    # dob and age
+    dataset['age_new1'] = dataset['dob and age'].str.extract("\s?\((\d\d).*\)")
+    dataset['dob2']= dataset['dob and age'].str.extract("^(\d{1,2}/\d{2}/\d{4})")
+    # print(dataset[['age_new']].value_counts())
+
+    """
+    for index in dataset.index:
+        val_string=dataset.loc[index, 'dob and age']
+        if val_string==val_string:
+            dataset.loc[index, 'dob1'] = ''.join(re.sub(pattern="\s?\(\d\d.*\)", repl="", string=val_string))
+            dataset.loc[index, 'age_new'] = ''.join(re.findall("\((\d\d)\s?.*\)", string=val_string)).strip()
+        val_2 = dataset.loc[index, 'age/gender/dob']
+    # split age/gender/dob
+        if val_2==val_2:
+            dataset.loc[index, 'age_new']= ''.join(re.findall(pattern="(\d\d) y.o.", string=val_2)).strip()
+            dataset.loc[index, 'gender_new']= ''.join(re.findall(pattern="(M|F)", string=val_2))
+            dataset.loc[index, 'dob1']= ''.join(re.findall(pattern="(\d{1,2}/\d\d/\d{4})", string=val_2))
+    # dataset.loc['age_new']=dataset.age_new.replace(r'^\s*$', np.nan, regex=True)
+    # dataset.loc['age_new']=dataset.gender_new.replace(r'^\s*$', np.nan, regex=True)
+    """
+    dataset.drop(columns=['dob and age', 'age/gender/dob'], inplace=True)
+    return dataset
+
+
+    # newdsat.apply(lambda  row: ''.join(list(compress(row, row.notna()))), axis=1)
+
 if __name__ == '__main__':
 
     # File path
     FLDR_PTH = '/Users/sandeep/Documents/1-PROJECTS/sts/reports'
     # FILE_NAME = 'OR_combined_data_2021_07_06-0403PM.csv' OLD ONE
-    FILE_NAME = 'OR_combined_data_2021_08_18-0448PM.csv'
+    FILE_NAME = 'OR_combined_data_2021_08_25-0334PM.csv'
     #FILE_NAME = 'OR_combined_data_2021_07_13-1203PM.csv' # Updated with new sites
     OUT_PTH = r'/Users/sandeep/Documents/1-PROJECTS/sts/reports'
 
@@ -104,6 +146,7 @@ if __name__ == '__main__':
     cols_to_drop = all_columns[
         all_columns.New_names.isnull()]['Old_names'].tolist()
     cols_to_rename = all_columns[all_columns.New_names.notnull()]
+
     # Dictionary of columns to be renamed
     old_new_cols = dict(
         zip(cols_to_rename.Old_names.tolist(),
@@ -116,6 +159,8 @@ if __name__ == '__main__':
     # created in (old_new_cols)
 
     datafile = pd.read_csv(CSV_FILE, low_memory=False)
+    datatfile = clean_age_variable(datafile)
+    datafile.to_csv('intermediate_1.csv')
     datafile.drop(columns=cols_to_drop, inplace=True)
     datafile.rename(columns=old_new_cols, inplace=True)
     datafile.drop(columns="Unnamed: 0", inplace=True)
@@ -136,14 +181,18 @@ if __name__ == '__main__':
         'surg_dt': 'SURGERY_DT',
         'disch_dt': 'DISCHARGE_DT',
         'proc_des': 'PRCDR_DES',
-        'mrn': 'MEDICAL_ID',
+        # 'mrn': 'MEDICAL_ID',
         'rec': 'RCD_ID',
-        'patient_id': 'PAT_ID',
+        # 'patient_id': 'PAT_ID',
         'procedure': 'PRCDR',
-        'gender': 'PATIENT_SEX'
+        'gender' : 'PATIENT_SEX',
+        'birth_dt' : 'DOB',
+        'age' : 'PATIENT_AGE'
     }
+    # datafile.to_csv("intermediate.csv")
 
     for key, val in COLS_DT.items():
+        print(key)
         datafile[val] = non_null_mrn(key)
 
     datafile = drop_cols(pd_dat=datafile, del_col_names=list(COLS_DT.keys()))
@@ -153,8 +202,18 @@ if __name__ == '__main__':
 
     # Organize cols
     cols_order = [
-        "SITE_ID", "RCD_ID", "PAT_ID", "MEDICAL_ID", "PATIENT_SEX",
-        "ADMISSION_DT", "SURGERY_DT", "DISCHARGE_DT", "PRCDR", "PRCDR_DES",
+        "SITE_ID",
+        "RCD_ID",
+        # "PAT_ID",
+        # "MEDICAL_ID",
+        "PATIENT_SEX",
+        "ADMISSION_DT",
+        "SURGERY_DT",
+        "DISCHARGE_DT",
+        "PRCDR",
+        "PRCDR_DES",
+        "PATIENT_AGE",
+        "DOB",
         "filename"
     ]
 
